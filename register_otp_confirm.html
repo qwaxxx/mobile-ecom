@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Code Verification</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <link rel="stylesheet" href="asset/css/style.css">
+</head>
+<body>
+
+<div class="auth-main">
+  <div class="auth-wrapper v3">
+    <div class="auth-form">
+      <div class="card my-5">
+        <div class="card-body">
+          <h3 class="mb-3"><b>Enter Verification Code</b></h3>
+          <!-- ✅ OTP Form -->
+          <form method="POST" id="otpForm">
+            <div class="row text-center">
+                <input type="text" id="otp1" maxlength="1" class="otp-input" required>
+                <input type="text" id="otp2" maxlength="1" class="otp-input" required>
+                <input type="text" id="otp3" maxlength="1" class="otp-input" required>
+                <input type="text" id="otp4" maxlength="1" class="otp-input" required>
+            </div>
+            <input type="hidden" name="otp" id="combinedOtp">
+            <div class="d-grid mt-4">
+              
+              <button id="verifyBtn" class="btn btn-primary">Verify</button>
+            </div>
+          </form>
+
+          <div class="text-center mt-3">
+            <p>Didn't receive the code? <a href="#">Resend Code</a></p>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- JS to combine OTP -->
+<script>
+  // Autofocus logic
+document.querySelectorAll('.otp-input').forEach((input, index, inputs) => {
+  input.addEventListener('input', () => {
+    if (input.value.length === 1 && index < inputs.length - 1) {
+      inputs[index + 1].focus();
+    }
+  });
+});
+
+// Submit OTP
+document.getElementById("verifyBtn").addEventListener("click", () => {
+  const enteredOtp = [...Array(4)].map((_, i) => document.getElementById("otp" + (i + 1)).value).join('');
+  const storedOtp = localStorage.getItem("otp");
+  const regData = JSON.parse(localStorage.getItem("registration_data"));
+
+  console.log("Entered OTP:", enteredOtp);
+  console.log("Stored OTP:", storedOtp);
+  console.log("Data to send:", regData);
+
+  if (!enteredOtp || !storedOtp || !regData) {
+    alert("Missing OTP or registration data. Please register again.");
+    window.location.href = "register.html"; // back to registration
+    return;
+  }
+
+  if (enteredOtp !== storedOtp) {
+    alert("Invalid OTP. Please try again.");
+    return;
+  }
+
+  // ✅ Send verified user data to backend
+  fetch("api/save_user.php", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(regData),
+  })
+    .then(async (res) => {
+    const text = await res.text();
+    try {
+      return JSON.parse(text);
+    } catch (err) {
+      console.error("❌ Invalid JSON response:", text);
+      throw new Error("Invalid JSON");
+    }
+  })
+    .then(response => {
+      if (response.status === "success") {
+        alert("🎉 Registration successful!");
+        localStorage.removeItem("otp");
+        localStorage.removeItem("registration_data");
+        window.location.href = "login_page.html";
+      } else {
+        alert("❌ Registration failed: " + response.message);
+      }
+    })
+    .catch(err => {
+      console.error("Error:", err);
+      alert("Network error. Try again.");
+    });
+});
+
+</script>
+
+</body>
+</html>

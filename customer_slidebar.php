@@ -16,6 +16,13 @@
           </a>
         </li>
 
+        <li class="pc-item">
+          <a href="index.php" class="pc-link d-flex align-items-center">
+            <span class="pc-micon me-2"><i class="ti ti-shopping-cart fs-5"></i></span>
+            <span class="pc-mtext fw-semibold">Shop</span>
+          </a>
+        </li>
+
         <li class="pc-item pc-caption">
           <label>Settings</label>
           <i class="ti ti-news"></i>

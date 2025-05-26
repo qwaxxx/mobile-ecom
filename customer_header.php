@@ -44,27 +44,53 @@
     <div class="ms-auto">
       <ul class="list-unstyled">
 
+
         <li class="dropdown pc-h-item">
-          <a class="pc-head-link dropdown-toggle arrow-none me-0" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
-            <i class="ti ti-bell"></i>
-            <span id="notificationBadge" class="badge bg-danger rounded-pill position-absolute top-0 start-100 translate-middle">3</span>
+          <a class="nav-link position-relative d-flex align-items-center" href="index.php">
+            <i class="fas fa-shopping-bag fs-5 me-1"></i>
+            <span class="d-none d-sm-inline-block fw-semibold">Shop</span>
+          </a>
+        </li>
+
+        <li class="dropdown pc-h-item">
+          <a class="nav-link position-relative d-flex align-items-center" href="checkout-page.php">
+            <i class="fas fa-shopping-cart fs-5 me-1"></i>
+            <span class="d-none d-sm-inline-block fw-semibold">Cart</span>
+            <?php if (!empty($cart)) : ?>
+              <span class="badge bg-danger rounded-pill position-absolute top-0 start-100 translate-middle">
+                <?php echo count($cart); ?>
+              </span>
+            <?php endif; ?>
+          </a>
+        </li>
+
+
+        <li class="dropdown pc-h-item">
+          <a class="pc-head-link dropdown-toggle arrow-none position-relative" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+            <i class="ti ti-bell fs-5"></i>
+            <span id="notificationBadge" >0</span>
           </a>
 
-          <div class="dropdown-menu dropdown-notification dropdown-menu-end pc-h-dropdown">
-            <div class="dropdown-header d-flex align-items-center justify-content-between">
-              <h5 class="m-0">Notifications</h5>
-              <a href="#" class="pc-head-link bg-transparent" onclick="clearNotifications(event)">
-                <i class="ti ti-x text-danger"></i>
+          <div class="dropdown-menu dropdown-menu-end pc-h-dropdown shadow dropdown-notification">
+            <div class="dropdown-header d-flex align-items-center justify-content-between px-3 py-2">
+              <h6 class="mb-0 fw-semibold text-dark">Notifications</h6>
+              <a href="#" class="text-danger" onclick="clearNotifications(event)">
+                <i class="ti ti-x fs-6"></i>
               </a>
             </div>
-            <div class="dropdown-divider"></div>
-            <div class="dropdown-header px-0 text-wrap header-notification-scroll position-relative" style="max-height: calc(100vh - 215px); overflow-y: auto;">
-              <div class="list-group list-group-flush w-100" id="notificationList"></div>
-            </div>
-            <div class="dropdown-divider"></div>
+            <div class="dropdown-divider my-0"></div>
 
+            <div class="px-2 py-1 overflow-auto" style="max-height: calc(100vh - 215px);" id="notificationList">
+            
+            </div>
+
+            <div class="dropdown-divider my-0"></div>
+            <div class="text-center py-2">
+              <a href="#" class="text-primary fw-semibold small">View All</a>
+            </div>
           </div>
         </li>
+
 
         <li class="dropdown pc-h-item header-user-profile">
           <a

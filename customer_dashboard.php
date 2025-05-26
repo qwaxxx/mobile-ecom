@@ -60,44 +60,6 @@ $image_src = $profile_image ? 'img/' . $profile_image : 'https://via.placeholder
     <div class="pc-content">
 
       <div class="row">
-        <?php
-        $totalAddcarts = $conn->query("SELECT COUNT(*) as count FROM addcarts where addcart_user_id =$user_id")->fetch_assoc()['count'];
-        $totalNotifications = $conn->query("SELECT COUNT(*) as count FROM notifications where user_id = $user_id")->fetch_assoc()['count'];
-        ?>
-
-
-        <!-- Add to Carts -->
-        <div class="col-md-6 col-xl-6">
-          <div class="card text-white bg-warning">
-            <div class="card-body d-flex align-items-center">
-              <div class="me-3">
-                <i class="fas fa-shopping-cart fa-2x"></i>
-              </div>
-              <div>
-                <h6 class="mb-1 text-white-50">Total AddCarts</h6>
-                <h4 class="mb-0"><?= number_format($totalAddcarts) ?></h4>
-              </div>
-            </div>
-          </div>
-        </div>
-
-
-
-        <!-- Notifications -->
-        <div class="col-md-6 col-xl-6">
-          <div class="card text-white bg-secondary">
-            <div class="card-body d-flex align-items-center">
-              <div class="me-3">
-                <i class="fas fa-bell fa-2x"></i>
-              </div>
-              <div>
-                <h6 class="mb-1 text-white-50">Total Notifications</h6>
-                <h4 class="mb-0"><?= number_format($totalNotifications) ?></h4>
-              </div>
-            </div>
-          </div>
-        </div>
-        <!-- [ sample-page ] end -->
 
         <div class="col-12">
           <div class="card">
@@ -121,6 +83,7 @@ $image_src = $profile_image ? 'img/' . $profile_image : 'https://via.placeholder
                       <th onclick="sortTable(7)">Parcel Quantity <span class="sort-indicator"></span></th>
                       <th onclick="sortTable(8)">Total Amount <span class="sort-indicator"></span></th>
                       <th onclick="sortTable(9)">Status <span class="sort-indicator"></span></th>
+                      <th onclick="sortTable(10)">Receipt <span class="sort-indicator"></span></th>
 
                     </tr>
                   </thead>
@@ -144,6 +107,30 @@ $image_src = $profile_image ? 'img/' . $profile_image : 'https://via.placeholder
     </div>
   </div>
   <!-- [ Main Content ] end -->
+
+   <div id="receiptContent" style="display:none; padding:20px; font-family:Arial, sans-serif;">
+    <h4 style="text-align:center;">Order Receipt</h4>
+    <hr>
+    <table style="width:100%; border-collapse:collapse;" border="1">
+      <thead>
+        <tr style="background:#f0f0f0;">
+          <th style="padding:5px;">Date</th>
+          <th style="padding:5px;">Cart ID</th>
+          <th style="padding:5px;">Name</th>
+          <th style="padding:5px;">Address</th>
+          <th style="padding:5px;">Qty</th>
+          <th style="padding:5px;">Amount</th>
+          <th style="padding:5px;">Status</th>
+        </tr>
+      </thead>
+      <tbody id="receiptTableBody"></tbody>
+    </table>
+    <p style="margin-top:20px; font-size:12px; text-align:center;">Thank you for your order!</p>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
   <?php include("customer_footer.php") ?>
   <script type="text/javascript" src="js/jquery-3.4.1.min.js"></script>
@@ -270,12 +257,50 @@ $image_src = $profile_image ? 'img/' . $profile_image : 'https://via.placeholder
   <td>${row.total_quantity}</td>
   <td>${row.total_amount}</td>
   <td>${row.addcart_status}</td>
+   <td>
+      <button class="btn btn-primary btn-sm"
+              onclick='downloadReceipt(${JSON.stringify(row)})'>
+        Download
+      </button>
+    </td>
 </tr>
         `;
         });
       }
     }
 
+     function downloadReceipt(row) {
+  const receiptContainer = document.createElement('div');
+  receiptContainer.innerHTML = `
+    <div style="font-family: Arial, sans-serif; padding: 20px; max-width: 600px; margin: auto; border: 1px solid #ccc; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
+      <h2 style="text-align: center;">Order Receipt</h2>
+      <table style="width: 100%; margin-top: 20px; border-collapse: collapse;">
+        <tr><td style="font-weight:bold; background:#f9f9f9; border:1px solid #ddd;">Order ID</td><td style="border:1px solid #ddd;">${row.addcart_id}</td></tr>
+        <tr><td style="font-weight:bold; background:#f9f9f9; border:1px solid #ddd;">Order Date</td><td style="border:1px solid #ddd;">${row.order_date}</td></tr>
+        <tr><td style="font-weight:bold; background:#f9f9f9; border:1px solid #ddd;">Street / Purok</td><td style="border:1px solid #ddd;">${row.billing_street_village_purok}</td></tr>
+        <tr><td style="font-weight:bold; background:#f9f9f9; border:1px solid #ddd;">Barangay</td><td style="border:1px solid #ddd;">${row.billing_baranggay}</td></tr>
+        <tr><td style="font-weight:bold; background:#f9f9f9; border:1px solid #ddd;">City</td><td style="border:1px solid #ddd;">${row.billing_city}</td></tr>
+        <tr><td style="font-weight:bold; background:#f9f9f9; border:1px solid #ddd;">Province</td><td style="border:1px solid #ddd;">${row.billing_province}</td></tr>
+        <tr><td style="font-weight:bold; background:#f9f9f9; border:1px solid #ddd;">Country</td><td style="border:1px solid #ddd;">${row.billing_country}</td></tr>
+        <tr><td style="font-weight:bold; background:#f9f9f9; border:1px solid #ddd;">Total Items</td><td style="border:1px solid #ddd;">${row.total_quantity}</td></tr>
+        <tr><td style="font-weight:bold; background:#f9f9f9; border:1px solid #ddd;">Total Amount</td><td style="border:1px solid #ddd;">₱${parseFloat(row.total_amount).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td></tr>
+        <tr><td style="font-weight:bold; background:#f9f9f9; border:1px solid #ddd;">Status</td><td style="border:1px solid #ddd;">${row.addcart_status}</td></tr>
+      </table>
+      <p style="text-align: center; margin-top: 30px;">Thank you for your purchase!</p>
+    </div>
+  `;
+
+  // Generate and save PDF
+  html2pdf()
+    .from(receiptContainer)
+    .set({
+      margin: 10,
+      filename: `receipt-${row.addcart_id}.pdf`,
+      html2canvas: { scale: 2 },
+      jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+    })
+    .save();
+}
 
     function searchTable() {
       const input = document.getElementById("searchInput");
@@ -329,8 +354,8 @@ $image_src = $profile_image ? 'img/' . $profile_image : 'https://via.placeholder
   <script>
     function loadNotifications(all = false) {
       const url = all ?
-        'fetch_notification.php?all=1' :
-        'fetch_notification.php';
+        'customer_fetch_notification.php?all=1' :
+        'customer_fetch_notification.php';
 
       fetch(url)
         .then(res => res.json())
@@ -379,7 +404,7 @@ $image_src = $profile_image ? 'img/' . $profile_image : 'https://via.placeholder
 
     // Example of your existing click‑handler
     function handleNotificationClick(notifId, orderId) {
-      fetch('mark_notification_read.php', {
+      fetch('customer_mark_notification_read.php', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
@@ -418,7 +443,7 @@ $image_src = $profile_image ? 'img/' . $profile_image : 'https://via.placeholder
         // Check if 2 minutes have passed since the last notification
         if (currentTime - lastNotificationTime >= 120000) { // 120000 ms = 2 minutes
           $.ajax({
-            url: "fetch_notification.php",
+            url: "customer_fetch_notification.php",
             type: "POST",
             success: function(response) {
               if (response.result === true) {

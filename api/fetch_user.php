@@ -1,24 +1,28 @@
 <?php
 header("Content-Type: application/json");
-include "conn.php"; // assumes $conn = new mysqli(...);
+include "conn.php"; // assumes $conn = new mysqli(...)
 
 $response = [];
 
-$sql = "SELECT id, name, email, user_type, create_on, profile_image, contact FROM users";
-$result = mysqli_query($conn, $sql);
+if (isset($_GET['user_id'])) {
+    $user_id = mysqli_real_escape_string($conn, $_GET['user_id']);
 
-if ($result) {
-    $users = [];
+    $sql = "SELECT id, name, email, user_type, create_on, profile_image, contact FROM users WHERE id = '$user_id' LIMIT 1";
+    $result = mysqli_query($conn, $sql);
 
-    while ($row = mysqli_fetch_assoc($result)) {
-        $users[] = $row;
+    if ($result && mysqli_num_rows($result) > 0) {
+        $user = mysqli_fetch_assoc($result);
+
+        $response['success'] = true;
+        $response['name'] = $user['name'];
+        $response['user'] = $user; // Optional: send full user data
+    } else {
+        $response['success'] = false;
+        $response['error'] = "User not found.";
     }
-
-    $response['success'] = true;
-    $response['users'] = $users;
 } else {
     $response['success'] = false;
-    $response['error'] = mysqli_error($conn);
+    $response['error'] = "Missing user_id.";
 }
 
 echo json_encode($response);

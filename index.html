@@ -204,6 +204,7 @@
     <script>
         $(document).ready(function() 
         {
+           
             loadProducts();
             // Search input live typing
             $('#search').on('keyup', function() {
@@ -284,7 +285,6 @@
             const badge = document.getElementById('cart-badge');
             if (badge) {
                 badge.textContent = totalItems > 0 ? totalItems : '';
-            }else{
             }
         }
         function createGuestIdIfNeeded() {
@@ -300,16 +300,18 @@
             }
             const userNav = document.getElementById('userNav');
             const userId = localStorage.getItem('user_id');
+            alert("Guest ID: " + userId);
             if (userId) {
                 // Fetch user's name from the server using Ajax
                 fetch('api/fetch_user.php?user_id=' + encodeURIComponent(userId))
                     .then(response => response.json())
                     .then(data => {
                         if (data.success) {
+                            
                             userNav.innerHTML = `
                                 <li class="nav-item">
                                     <a class="nav-link waves-effect" href="checkout-page.html">
-                                        <span id="cart-badge" class="badge red z-depth-1 mr-1">0</span>
+                                        <span id="cart-badge" class="badge red z-depth-1 mr-1"></span>
                                         <i class="fas fa-shopping-cart"></i>
                                         <span class="clearfix d-none d-sm-inline-block"> Cart </span>
                                     </a>
@@ -318,7 +320,9 @@
                                     <a class="nav-link" href="customer_dashboard.php"><span>${data.name}</span></a>
                                     <a class="nav-link" href="#" onclick="logout()">Logout</a>
                                 </li>
+                                
                             `;
+                             updateCartBadge()
                         } else {
                             showLoginLink();
                         }
@@ -348,6 +352,7 @@
             }
             window.logout = function() {
                 localStorage.removeItem('user_id');
+                localStorage.removeItem('temp_id');
                 window.location.href = "logout.php";
             };
 

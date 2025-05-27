@@ -108,7 +108,7 @@ $image_src = $profile_image ? 'img/' . $profile_image : 'https://via.placeholder
   </div>
   <!-- [ Main Content ] end -->
 
-   <div id="receiptContent" style="display:none; padding:20px; font-family:Arial, sans-serif;">
+  <div id="receiptContent" style="display:none; padding:20px; font-family:Arial, sans-serif;">
     <h4 style="text-align:center;">Order Receipt</h4>
     <hr>
     <table style="width:100%; border-collapse:collapse;" border="1">
@@ -269,9 +269,9 @@ $image_src = $profile_image ? 'img/' . $profile_image : 'https://via.placeholder
       }
     }
 
-     function downloadReceipt(row) {
-  const receiptContainer = document.createElement('div');
-  receiptContainer.innerHTML = `
+    function downloadReceipt(row) {
+      const receiptContainer = document.createElement('div');
+      receiptContainer.innerHTML = `
     <div style="font-family: Arial, sans-serif; padding: 20px; max-width: 600px; margin: auto; border: 1px solid #ccc; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
       <h2 style="text-align: center;">Order Receipt</h2>
       <table style="width: 100%; margin-top: 20px; border-collapse: collapse;">
@@ -290,17 +290,23 @@ $image_src = $profile_image ? 'img/' . $profile_image : 'https://via.placeholder
     </div>
   `;
 
-  // Generate and save PDF
-  html2pdf()
-    .from(receiptContainer)
-    .set({
-      margin: 10,
-      filename: `receipt-${row.addcart_id}.pdf`,
-      html2canvas: { scale: 2 },
-      jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-    })
-    .save();
-}
+      // Generate and save PDF
+      html2pdf()
+        .from(receiptContainer)
+        .set({
+          margin: 10,
+          filename: `receipt-${row.addcart_id}.pdf`,
+          html2canvas: {
+            scale: 2
+          },
+          jsPDF: {
+            unit: 'mm',
+            format: 'a4',
+            orientation: 'portrait'
+          }
+        })
+        .save();
+    }
 
     function searchTable() {
       const input = document.getElementById("searchInput");

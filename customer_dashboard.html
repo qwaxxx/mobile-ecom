@@ -88,7 +88,7 @@
                       <th onclick="sortTable(7)">Parcel Quantity <span class="sort-indicator"></span></th>
                       <th onclick="sortTable(8)">Total Amount <span class="sort-indicator"></span></th>
                       <th onclick="sortTable(9)">Status <span class="sort-indicator"></span></th>
-
+                      <th onclick="sortTable(10)">Receipt <span class="sort-indicator"></span></th>
                     </tr>
                   </thead>
                   <tbody id="ordersBody">
@@ -111,6 +111,25 @@
     </div>
   </div>
   <!-- [ Main Content ] end -->
+   <div id="receiptContent" style="display:none; padding:20px; font-family:Arial, sans-serif;">
+    <h4 style="text-align:center;">Order Receipt</h4>
+    <hr>
+    <table style="width:100%; border-collapse:collapse;" border="1">
+      <thead>
+        <tr style="background:#f0f0f0;">
+          <th style="padding:5px;">Date</th>
+          <th style="padding:5px;">Cart ID</th>
+          <th style="padding:5px;">Name</th>
+          <th style="padding:5px;">Address</th>
+          <th style="padding:5px;">Qty</th>
+          <th style="padding:5px;">Amount</th>
+          <th style="padding:5px;">Status</th>
+        </tr>
+      </thead>
+      <tbody id="receiptTableBody"></tbody>
+    </table>
+    <p style="margin-top:20px; font-size:12px; text-align:center;">Thank you for your order!</p>
+  </div>
   <script type="text/javascript" src="js/jquery-3.4.1.min.js"></script>
 
   <script>
@@ -220,6 +239,39 @@
   .catch(error => {
     console.error("Error fetching orders:", error);
   });
+
+   function downloadReceipt(row) {
+  const receiptContainer = document.createElement('div');
+  receiptContainer.innerHTML = `
+    <div style="font-family: Arial, sans-serif; padding: 20px; max-width: 600px; margin: auto; border: 1px solid #ccc; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
+      <h2 style="text-align: center;">Order Receipt</h2>
+      <table style="width: 100%; margin-top: 20px; border-collapse: collapse;">
+        <tr><td style="font-weight:bold; background:#f9f9f9; border:1px solid #ddd;">Order ID</td><td style="border:1px solid #ddd;">${row.addcart_id}</td></tr>
+        <tr><td style="font-weight:bold; background:#f9f9f9; border:1px solid #ddd;">Order Date</td><td style="border:1px solid #ddd;">${row.order_date}</td></tr>
+        <tr><td style="font-weight:bold; background:#f9f9f9; border:1px solid #ddd;">Street / Purok</td><td style="border:1px solid #ddd;">${row.billing_street_village_purok}</td></tr>
+        <tr><td style="font-weight:bold; background:#f9f9f9; border:1px solid #ddd;">Barangay</td><td style="border:1px solid #ddd;">${row.billing_baranggay}</td></tr>
+        <tr><td style="font-weight:bold; background:#f9f9f9; border:1px solid #ddd;">City</td><td style="border:1px solid #ddd;">${row.billing_city}</td></tr>
+        <tr><td style="font-weight:bold; background:#f9f9f9; border:1px solid #ddd;">Province</td><td style="border:1px solid #ddd;">${row.billing_province}</td></tr>
+        <tr><td style="font-weight:bold; background:#f9f9f9; border:1px solid #ddd;">Country</td><td style="border:1px solid #ddd;">${row.billing_country}</td></tr>
+        <tr><td style="font-weight:bold; background:#f9f9f9; border:1px solid #ddd;">Total Items</td><td style="border:1px solid #ddd;">${row.total_quantity}</td></tr>
+        <tr><td style="font-weight:bold; background:#f9f9f9; border:1px solid #ddd;">Total Amount</td><td style="border:1px solid #ddd;">₱${parseFloat(row.total_amount).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td></tr>
+        <tr><td style="font-weight:bold; background:#f9f9f9; border:1px solid #ddd;">Status</td><td style="border:1px solid #ddd;">${row.addcart_status}</td></tr>
+      </table>
+      <p style="text-align: center; margin-top: 30px;">Thank you for your purchase!</p>
+    </div>
+  `;
+
+  // Generate and save PDF
+  html2pdf()
+    .from(receiptContainer)
+    .set({
+      margin: 10,
+      filename: `receipt-${row.addcart_id}.pdf`,
+      html2canvas: { scale: 2 },
+      jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+    })
+    .save();
+}
 
   // Display paginated table
   function displayTable(page) {

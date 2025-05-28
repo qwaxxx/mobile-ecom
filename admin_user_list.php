@@ -13,6 +13,49 @@ $user_id = $_SESSION['user_id'];
 $update_success = false;
 $delete_success = false;
 
+if (isset($_POST['add_user'])) {
+    // Extract form data
+    $name = $_POST['name'];
+    $email = $_POST['email'];
+    $contact = $_POST['contact'];
+    $user_type = $_POST['user_type'];
+    $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
+
+    // Default image path (in case no image uploaded)
+    $profile_image = null;
+
+    // Check and process uploaded image
+    if (isset($_FILES['profile_image']) && $_FILES['profile_image']['error'] === 0) {
+        $allowed_types = ['image/jpeg', 'image/png', 'image/gif'];
+        $file_type = $_FILES['profile_image']['type'];
+
+        if (in_array($file_type, $allowed_types)) {
+            $target_dir = "img/";
+            // Ensure target directory exists
+            if (!is_dir($target_dir)) {
+                mkdir($target_dir, 0755, true);
+            }
+
+            $file_name = uniqid() . "_" . basename($_FILES["profile_image"]["name"]);
+            $target_file = $target_dir . $file_name;
+
+            if (move_uploaded_file($_FILES["profile_image"]["tmp_name"], $target_file)) {
+                $profile_image = $file_name; // Save only the filename (not full path)
+            }
+        }
+    }
+
+    // Prepare SQL and insert user
+    $stmt = $conn->prepare("INSERT INTO users (name, email, contact, user_type, password, profile_image) VALUES (?, ?, ?, ?, ?, ?)");
+    $stmt->bind_param("ssssss", $name, $email, $contact, $user_type, $password, $profile_image);
+    $stmt->execute();
+    
+    // Redirect to refresh the page
+    header("Location: " . $_SERVER['PHP_SELF']);
+    exit();
+}
+
+
 // Handle update
 if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['id']) && !isset($_POST['delete_user'])) {
     $id = intval($_POST['id']);
@@ -155,6 +198,10 @@ $image_src = $profile_image ? 'img/' . $profile_image : 'https://via.placeholder
   <!-- [ Main Content ] start -->
   <div class="pc-container">
     <div class="pc-content">
+
+  <button type="button" class="btn btn-success mb-3" data-bs-toggle="modal" data-bs-target="#addModal">
+    <i class="fas fa-user-plus me-1"></i> Add User
+  </button>
     
       <!-- [ Main Content ] start -->
       <div class="row">
@@ -185,7 +232,7 @@ $image_src = $profile_image ? 'img/' . $profile_image : 'https://via.placeholder
                     <td><?= htmlspecialchars($row['contact']) ?></td>
                     <td><?= htmlspecialchars($row['user_type']) ?></td>
                     <td><img src="<?= $img ?>" height="40" class="rounded-circle"></td>
-                    <td>
+                   <td>
                       <!-- Edit Button -->
                       <button class="btn btn-warning btn-sm editBtn"
                         data-id="<?= $row['id'] ?>"
@@ -197,14 +244,18 @@ $image_src = $profile_image ? 'img/' . $profile_image : 'https://via.placeholder
                         data-profile="<?= $img ?>">
                         <i class="fas fa-edit me-1"></i>
                       </button>
-                      <!-- Delete Button -->
-                      <form method="POST" class="d-inline deleteForm">
-                        <input type="hidden" name="delete_user" value="<?= $row['id'] ?>">
-                        <button type="button" class="btn btn-danger btn-sm deleteBtn">
-                          <i class="fas fa-trash-alt me-1"></i>
-                        </button>
-                      </form>
+
+                      <!-- Delete Button (only if user_type is not 'admin') -->
+                      <?php if ($row['user_type'] !== 'admin'): ?>
+                        <form method="POST" class="d-inline deleteForm">
+                          <input type="hidden" name="delete_user" value="<?= $row['id'] ?>">
+                          <button type="button" class="btn btn-danger btn-sm deleteBtn">
+                            <i class="fas fa-trash-alt me-1"></i>
+                          </button>
+                        </form>
+                      <?php endif; ?>
                     </td>
+
                   </tr>
                   <?php endwhile; ?>
                 </tbody>
@@ -265,6 +316,54 @@ $image_src = $profile_image ? 'img/' . $profile_image : 'https://via.placeholder
     </form>
   </div>
 </div>
+
+<!-- Add User Modal -->
+<div class="modal fade" id="addModal" tabindex="-1">
+  <div class="modal-dialog">
+    <form class="modal-content" method="POST" enctype="multipart/form-data">
+      <div class="modal-header">
+        <h5 class="modal-title">ADD USER</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="mb-3">
+          <label>Name</label>
+          <input type="text" class="form-control" name="name" required>
+        </div>
+        <div class="mb-3">
+          <label>Email</label>
+          <input type="email" class="form-control" name="email" required>
+        </div>
+        <div class="mb-3">
+          <label>Contact</label>
+          <input type="text" class="form-control" name="contact" required>
+        </div>
+        <div class="mb-3">
+          <label class="form-label" for="user_type">User Type</label>
+          <select class="form-control" id="user_type" name="user_type" required>
+              <option disabled selected value="">Choose...</option>
+              <option value="customer">Customer</option>
+              <option value="seller">Seller</option>
+              <option value="admin">Admin</option>
+          </select>
+        </div>
+        <div class="mb-3">
+          <label>Profile Image</label>
+          <input type="file" class="form-control" name="profile_image">
+        </div>
+        <div class="mb-3">
+          <label>Password</label>
+          <input type="password" class="form-control" name="password" required>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="submit" name="add_user" class="btn btn-primary">Add</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+      </div>
+    </form>
+  </div>
+</div>
+
 
   <script>
 function searchTable() {

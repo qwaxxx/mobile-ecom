@@ -17,7 +17,7 @@
         </li>
         <li class="pc-item">
           <a href="seller_transaction.php" class="pc-link">
-            <span class="pc-micon"><i class="ti ti-dashboard"></i></span>
+            <span class="pc-micon"><i class="ti ti-history"></i></span>
             <span class="pc-mtext">Transaction</span>
           </a>
         </li>

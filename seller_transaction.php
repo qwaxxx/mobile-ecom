@@ -100,75 +100,6 @@ $image_src = $profile_image ? 'img/' . $profile_image : 'https://via.placeholder
 
       <!-- [ Main Content ] start -->
       <div class="row">
-        <!-- [ sample-page ] start -->
-        <?php
-        // Assuming you already have a $conn variable for the database connection
-        $totalUsers = $conn->query("SELECT COUNT(*) as count FROM users")->fetch_assoc()['count'];
-        $totalAddcarts = $conn->query("SELECT COUNT(*) as count FROM addcarts")->fetch_assoc()['count'];
-        $totalProducts = $conn->query("SELECT COUNT(*) as count FROM products")->fetch_assoc()['count'];
-        $totalNotifications = $conn->query("SELECT COUNT(*) as count FROM notifications")->fetch_assoc()['count'];
-        ?>
-
-        <!-- Users -->
-        <div class="col-md-6 col-xl-3">
-          <div class="card text-white bg-info">
-            <div class="card-body d-flex align-items-center">
-              <div class="me-3">
-                <i class="fas fa-users fa-2x"></i>
-              </div>
-              <div>
-                <h6 class="mb-1 text-white-50">Total Users</h6>
-                <h4 class="mb-0"><?= number_format($totalUsers) ?></h4>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Add to Carts -->
-        <div class="col-md-6 col-xl-3">
-          <div class="card text-white bg-warning">
-            <div class="card-body d-flex align-items-center">
-              <div class="me-3">
-                <i class="fas fa-shopping-cart fa-2x"></i>
-              </div>
-              <div>
-                <h6 class="mb-1 text-white-50">Total AddCarts</h6>
-                <h4 class="mb-0"><?= number_format($totalAddcarts) ?></h4>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Products -->
-        <div class="col-md-6 col-xl-3">
-          <div class="card text-white bg-danger">
-            <div class="card-body d-flex align-items-center">
-              <div class="me-3">
-                <i class="fas fa-box-open fa-2x"></i>
-              </div>
-              <div>
-                <h6 class="mb-1 text-white-50">Total Products</h6>
-                <h4 class="mb-0"><?= number_format($totalProducts) ?></h4>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Notifications -->
-        <div class="col-md-6 col-xl-3">
-          <div class="card text-white bg-secondary">
-            <div class="card-body d-flex align-items-center">
-              <div class="me-3">
-                <i class="fas fa-bell fa-2x"></i>
-              </div>
-              <div>
-                <h6 class="mb-1 text-white-50">Total Notifications</h6>
-                <h4 class="mb-0"><?= number_format($totalNotifications) ?></h4>
-              </div>
-            </div>
-          </div>
-        </div>
-        <!-- [ sample-page ] end -->
 
         <div class="col-12">
           <div class="card">
@@ -199,6 +130,7 @@ $image_src = $profile_image ? 'img/' . $profile_image : 'https://via.placeholder
                           <th onclick="sortTable(8)">Parcel Quantity <span class="sort-indicator"></span></th>
                           <th onclick="sortTable(9)">Total Amount <span class="sort-indicator"></span></th>
                           <th onclick="sortTable(10)">Status <span class="sort-indicator"></span></th>
+                          <th onclick="sortTable(11)">Receipt <span class="sort-indicator"></span></th>
                           <th>Action</th>
                         </tr>
                       </thead>
@@ -221,6 +153,74 @@ $image_src = $profile_image ? 'img/' . $profile_image : 'https://via.placeholder
       </nav>
     </div>
   </div>
+
+  <div id="receiptContent" style="display:none; padding:20px; font-family:Arial, sans-serif;">
+    <h4 style="text-align:center;">Order Receipt</h4>
+    <hr>
+    <table style="width:100%; border-collapse:collapse;" border="1">
+      <thead>
+        <tr style="background:#f0f0f0;">
+          <th style="padding:5px;">Date</th>
+          <th style="padding:5px;">Cart ID</th>
+          <th style="padding:5px;">Name</th>
+          <th style="padding:5px;">Address</th>
+          <th style="padding:5px;">Qty</th>
+          <th style="padding:5px;">Amount</th>
+          <th style="padding:5px;">Status</th>
+        </tr>
+      </thead>
+      <tbody id="receiptTableBody"></tbody>
+    </table>
+    <p style="margin-top:20px; font-size:12px; text-align:center;">Thank you for your order!</p>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+
+  <script>
+    async function downloadReceipt() {
+      const receiptTable = document.getElementById('receiptTableBody');
+      receiptTable.innerHTML = '';
+
+      const start = (currentPage - 1) * rowsPerPage;
+      const end = start + rowsPerPage;
+      const paginatedItems = ordersData.slice(start, end);
+
+      paginatedItems.forEach(row => {
+        const address = `${row.billing_street_village_purok}, ${row.billing_baranggay}, ${row.billing_city}, ${row.billing_province}, ${row.billing_country}`;
+        const amount = parseFloat(row.total_amount).toLocaleString(undefined, {
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2
+        });
+
+        receiptTable.innerHTML += `
+          <tr>
+            <td style="padding:5px;">${row.order_date}</td>
+            <td style="padding:5px;">${row.addcart_id}</td>
+            <td style="padding:5px;">${row.billing_lname}, ${row.billing_fname}</td>
+            <td style="padding:5px;">${address}</td>
+            <td style="padding:5px;">${row.total_quantity}</td>
+            <td style="padding:5px;">₱${amount}</td>
+            <td style="padding:5px;">${row.addcart_status}</td>
+          </tr>`;
+      });
+
+      const element = document.getElementById("receiptContent");
+      const canvas = await html2canvas(element, { scale: 2 });
+      const imageData = canvas.toDataURL("image/png");
+      const pdf = new jspdf.jsPDF("p", "mm", "a4");
+      const imgProps = pdf.getImageProperties(imageData);
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+      const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+
+      pdf.addImage(imageData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+      pdf.save("Order-Receipt.pdf");
+    }
+
+  </script>
+
 
   <!-- [ Main Content ] end -->
 
@@ -372,11 +372,51 @@ $image_src = $profile_image ? 'img/' . $profile_image : 'https://via.placeholder
                         maximumFractionDigits: 2
                      })}</td>
         <td>${row.addcart_status}</td>
+         <td>
+            <button class="btn btn-primary btn-sm"
+                    onclick='downloadReceipt(${JSON.stringify(row)})'>
+              Download
+            </button>
+          </td>
         <td>${actionCell}</td>
       </tr>`;
       });
     }
 
+
+    function downloadReceipt(row) {
+  const receiptContainer = document.createElement('div');
+  receiptContainer.innerHTML = `
+    <div style="font-family: Arial, sans-serif; padding: 20px; max-width: 600px; margin: auto; border: 1px solid #ccc; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
+      <h2 style="text-align: center;">Order Receipt</h2>
+      <table style="width: 100%; margin-top: 20px; border-collapse: collapse;">
+        <tr><td style="font-weight:bold; background:#f9f9f9; border:1px solid #ddd;">Order ID</td><td style="border:1px solid #ddd;">${row.addcart_id}</td></tr>
+        <tr><td style="font-weight:bold; background:#f9f9f9; border:1px solid #ddd;">Order Date</td><td style="border:1px solid #ddd;">${row.order_date}</td></tr>
+        <tr><td style="font-weight:bold; background:#f9f9f9; border:1px solid #ddd;">Customer Name</td><td style="border:1px solid #ddd;">${row.billing_lname}, ${row.billing_fname}</td></tr>
+        <tr><td style="font-weight:bold; background:#f9f9f9; border:1px solid #ddd;">Street / Purok</td><td style="border:1px solid #ddd;">${row.billing_street_village_purok}</td></tr>
+        <tr><td style="font-weight:bold; background:#f9f9f9; border:1px solid #ddd;">Barangay</td><td style="border:1px solid #ddd;">${row.billing_baranggay}</td></tr>
+        <tr><td style="font-weight:bold; background:#f9f9f9; border:1px solid #ddd;">City</td><td style="border:1px solid #ddd;">${row.billing_city}</td></tr>
+        <tr><td style="font-weight:bold; background:#f9f9f9; border:1px solid #ddd;">Province</td><td style="border:1px solid #ddd;">${row.billing_province}</td></tr>
+        <tr><td style="font-weight:bold; background:#f9f9f9; border:1px solid #ddd;">Country</td><td style="border:1px solid #ddd;">${row.billing_country}</td></tr>
+        <tr><td style="font-weight:bold; background:#f9f9f9; border:1px solid #ddd;">Total Items</td><td style="border:1px solid #ddd;">${row.total_quantity}</td></tr>
+        <tr><td style="font-weight:bold; background:#f9f9f9; border:1px solid #ddd;">Total Amount</td><td style="border:1px solid #ddd;">₱${parseFloat(row.total_amount).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td></tr>
+        <tr><td style="font-weight:bold; background:#f9f9f9; border:1px solid #ddd;">Status</td><td style="border:1px solid #ddd;">${row.addcart_status}</td></tr>
+      </table>
+      <p style="text-align: center; margin-top: 30px;">Thank you for your purchase!</p>
+    </div>
+  `;
+
+  // Generate and save PDF
+  html2pdf()
+    .from(receiptContainer)
+    .set({
+      margin: 10,
+      filename: `receipt-${row.addcart_id}.pdf`,
+      html2canvas: { scale: 2 },
+      jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+    })
+    .save();
+}
 
     function searchTable() {
       const input = document.getElementById("searchInput");

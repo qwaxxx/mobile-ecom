@@ -45,10 +45,10 @@
 <div class="ms-auto">
   <ul class="list-unstyled">
     
-  <li class="dropdown pc-h-item">
+  <!-- <li class="dropdown pc-h-item">
           <a class="pc-head-link dropdown-toggle arrow-none me-0" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
             <i class="ti ti-bell"></i>
-            <span class="badge bg-danger rounded-pill position-absolute top-0 start-100 translate-middle">3</span>
+            <span>3</span>
           </a>
 
           <div class="dropdown-menu dropdown-notification dropdown-menu-end pc-h-dropdown">
@@ -61,7 +61,6 @@
             <div class="dropdown-divider"></div>
             <div class="dropdown-header px-0 text-wrap header-notification-scroll position-relative" style="max-height: calc(100vh - 215px); overflow-y: auto;">
               <div class="list-group list-group-flush w-100" id="notificationList">
-                <!-- Notifications will be injected here -->
               </div>
             </div>
             <div class="dropdown-divider"></div>
@@ -69,7 +68,7 @@
               <a href="#" class="link-primary">View all</a>
             </div>
           </div>
-        </li>
+        </li> -->
     
     <li class="dropdown pc-h-item header-user-profile">
       <a

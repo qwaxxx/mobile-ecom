@@ -19,13 +19,7 @@
           <label>Menu</label>
           <i class="ti ti-dashboard"></i>
         </li>
-       
-        <li class="pc-item">
-          <a href="admin_transaction.php" class="pc-link">
-            <span class="pc-micon"><i class="ti ti-color-swatch"></i></span>
-            <span class="pc-mtext">Transaction</span>
-          </a>
-        </li>
+      
         <li class="pc-item">
           <a href="admin_user_list.php" class="pc-link">
             <span class="pc-micon"><i class="ti ti-users"></i></span>

@@ -2,13 +2,48 @@
 session_start();
 include("api/conn.php");
 
-if (!isset($_SESSION['user_id']) || $_SESSION['role'] != 'admin') {
-    header("Location: login_page.php");
-    exit;
+// Access control
+if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
+  header("Location: login_page.php");
+  exit;
 }
 
-$user_id = $_SESSION['user_id'];
+// Upload product logic (moved to top of file)
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit'])) {
+  $user_id = (int)$_SESSION['user_id'];
+  $name = $_POST['prod_name'];
+  $price = (float)$_POST['prod_price'];
+  $stock = (int)$_POST['prod_stock'];
+  $description = $_POST['prod_description'];
 
+  $image_name = $_FILES['prod_picture']['name'];
+  $image_tmp = $_FILES['prod_picture']['tmp_name'];
+  $target_dir = "uploads/";
+  $target_file = $target_dir . basename($image_name);
+
+  if (move_uploaded_file($image_tmp, $target_file)) {
+    $stmt = $conn->prepare("INSERT INTO products (prod_name, prod_stock, prod_description, prod_price, prod_picture, user_id) VALUES (?, ?, ?, ?, ?, ?)");
+    if (!$stmt) {
+      die("Prepare failed: (" . $conn->errno . ") " . $conn->error);
+    }
+
+    $stmt->bind_param("sisdsi", $name, $stock, $description, $price, $target_file, $user_id);
+
+    if ($stmt->execute()) {
+      header("Location: seller_dashboard.php?success=1");
+      exit;
+    } else {
+      $upload_error = "Error: " . $stmt->error;
+    }
+
+    $stmt->close();
+  } else {
+    $upload_error = "Image upload failed.";
+  }
+}
+
+// Fetch seller info
+$user_id = (int)$_SESSION['user_id'];
 $query = "SELECT name, email, contact, profile_image FROM users WHERE id = ?";
 $stmt = $conn->prepare($query);
 $stmt->bind_param('i', $user_id);
@@ -20,8 +55,10 @@ $stmt->close();
 $image_src = $profile_image ? 'img/' . $profile_image : 'https://via.placeholder.com/150';
 ?>
 
+
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <title>Dashboard</title>
   <!-- [Meta] -->
@@ -33,126 +70,248 @@ $image_src = $profile_image ? 'img/' . $profile_image : 'https://via.placeholder
   <meta name="author" content="CodedThemes">
 
   <!-- [Favicon] icon -->
-  <link rel="icon" href="asset/images/favicon.svg" type="image/x-icon"> <!-- [Google Font] Family -->
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700&display=swap" id="main-font-link">
-<!-- [Tabler Icons] https://tablericons.com -->
-<link rel="stylesheet" href="asset/fonts/tabler-icons.min.css" >
-<!-- [Feather Icons] https://feathericons.com -->
-<link rel="stylesheet" href="asset/fonts/feather.css" >
-<!-- [Font Awesome Icons] https://fontawesome.com/icons -->
-<link rel="stylesheet" href="asset/fonts/fontawesome.css" >
-<!-- [Material Icons] https://fonts.google.com/icons -->
-<link rel="stylesheet" href="asset/fonts/material.css" >
-<!-- [Template CSS Files] -->
-<link rel="stylesheet" href="asset/css/style.css" id="main-style-link" >
-<link rel="stylesheet" href="asset/css/style-preset.css" >
+  <link rel="icon" href="asset/images/favicon.svg" type="image/x-icon">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700&display=swap" id="main-font-link">
+  <link rel="stylesheet" href="asset/fonts/tabler-icons.min.css">
+  <link rel="stylesheet" href="asset/fonts/feather.css">
+  <link rel="stylesheet" href="asset/fonts/fontawesome.css">
+  <link rel="stylesheet" href="asset/fonts/material.css">
+  <link rel="stylesheet" href="asset/css/style.css" id="main-style-link">
+  <link rel="stylesheet" href="asset/css/style-preset.css">
 
 </head>
-<!-- [Head] end -->
-<!-- [Body] Start -->
 
 <body data-pc-preset="preset-1" data-pc-direction="ltr" data-pc-theme="light">
   <!-- [ Pre-loader ] start -->
-<div class="loader-bg">
-  <div class="loader-track">
-    <div class="loader-fill"></div>
+  <div class="loader-bg">
+    <div class="loader-track">
+      <div class="loader-fill"></div>
+    </div>
   </div>
-</div>
-<!-- [ Pre-loader ] End -->
+  <!-- [ Pre-loader ] End -->
 
- <?php include("admin_slidebar.php") ?>
+  <?php include("admin_slidebar.php") ?>
 
- <?php include("admin_header.php") ?>
+  <?php include("admin_header.php") ?>
 
   <!-- [ Main Content ] start -->
   <div class="pc-container">
     <div class="pc-content">
-    
+
       <!-- [ Main Content ] start -->
       <div class="row">
         <!-- [ sample-page ] start -->
         <?php
-          // Assuming you already have a $conn variable for the database connection
-          $totalUsers = $conn->query("SELECT COUNT(*) as count FROM users")->fetch_assoc()['count'];
-          $totalAddcarts = $conn->query("SELECT COUNT(*) as count FROM addcarts")->fetch_assoc()['count'];
-          $totalProducts = $conn->query("SELECT COUNT(*) as count FROM products")->fetch_assoc()['count'];
-          $totalNotifications = $conn->query("SELECT COUNT(*) as count FROM notifications")->fetch_assoc()['count'];
-          ?>
+        // Assuming you already have a $conn variable for the database connection
+        $totalUsers = $conn->query("SELECT COUNT(*) as count FROM users")->fetch_assoc()['count'];
+        $totalAddcarts = $conn->query("SELECT COUNT(*) as count FROM addcarts")->fetch_assoc()['count'];
+        $totalProducts = $conn->query("SELECT COUNT(*) as count FROM products")->fetch_assoc()['count'];
+        $totalNotifications = $conn->query("SELECT COUNT(*) as count FROM notifications")->fetch_assoc()['count'];
+        ?>
 
-          <!-- Users -->
-          <div class="col-md-6 col-xl-3">
-            <div class="card text-white bg-info">
-              <div class="card-body d-flex align-items-center">
-                <div class="me-3">
-                  <i class="fas fa-users fa-2x"></i>
-                </div>
-                <div>
-                  <h6 class="mb-1 text-white-50">Total Users</h6>
-                  <h4 class="mb-0"><?= number_format($totalUsers) ?></h4>
-                </div>
+        <!-- Users -->
+        <div class="col-md-6 col-xl-3">
+          <div class="card text-white bg-info">
+            <div class="card-body d-flex align-items-center">
+              <div class="me-3">
+                <i class="fas fa-users fa-2x"></i>
+              </div>
+              <div>
+                <h6 class="mb-1 text-white-50">Total Users</h6>
+                <h4 class="mb-0"><?= number_format($totalUsers) ?></h4>
               </div>
             </div>
           </div>
+        </div>
 
-          <!-- Add to Carts -->
-          <div class="col-md-6 col-xl-3">
-            <div class="card text-white bg-warning">
-              <div class="card-body d-flex align-items-center">
-                <div class="me-3">
-                  <i class="fas fa-shopping-cart fa-2x"></i>
-                </div>
-                <div>
-                  <h6 class="mb-1 text-white-50">Total AddCarts</h6>
-                  <h4 class="mb-0"><?= number_format($totalAddcarts) ?></h4>
-                </div>
+        <!-- Add to Carts -->
+        <div class="col-md-6 col-xl-3">
+          <div class="card text-white bg-warning">
+            <div class="card-body d-flex align-items-center">
+              <div class="me-3">
+                <i class="fas fa-shopping-cart fa-2x"></i>
+              </div>
+              <div>
+                <h6 class="mb-1 text-white-50">Total AddCarts</h6>
+                <h4 class="mb-0"><?= number_format($totalAddcarts) ?></h4>
               </div>
             </div>
           </div>
+        </div>
 
-          <!-- Products -->
-          <div class="col-md-6 col-xl-3">
-            <div class="card text-white bg-danger">
-              <div class="card-body d-flex align-items-center">
-                <div class="me-3">
-                  <i class="fas fa-box-open fa-2x"></i>
-                </div>
-                <div>
-                  <h6 class="mb-1 text-white-50">Total Products</h6>
-                  <h4 class="mb-0"><?= number_format($totalProducts) ?></h4>
-                </div>
+        <!-- Products -->
+        <div class="col-md-6 col-xl-3">
+          <div class="card text-white bg-danger">
+            <div class="card-body d-flex align-items-center">
+              <div class="me-3">
+                <i class="fas fa-box-open fa-2x"></i>
+              </div>
+              <div>
+                <h6 class="mb-1 text-white-50">Total Products</h6>
+                <h4 class="mb-0"><?= number_format($totalProducts) ?></h4>
               </div>
             </div>
           </div>
+        </div>
 
-          <!-- Notifications -->
-          <div class="col-md-6 col-xl-3">
-            <div class="card text-white bg-secondary">
-              <div class="card-body d-flex align-items-center">
-                <div class="me-3">
-                  <i class="fas fa-bell fa-2x"></i>
-                </div>
-                <div>
-                  <h6 class="mb-1 text-white-50">Total Notifications</h6>
-                  <h4 class="mb-0"><?= number_format($totalNotifications) ?></h4>
-                </div>
+        <!-- Notifications -->
+        <div class="col-md-6 col-xl-3">
+          <div class="card text-white bg-secondary">
+            <div class="card-body d-flex align-items-center">
+              <div class="me-3">
+                <i class="fas fa-bell fa-2x"></i>
+              </div>
+              <div>
+                <h6 class="mb-1 text-white-50">Total Notifications</h6>
+                <h4 class="mb-0"><?= number_format($totalNotifications) ?></h4>
               </div>
             </div>
           </div>
-
-
+        </div>
         <!-- [ sample-page ] end -->
 
-        
+        <div class="col-12">
+          <div class="card">
+            <div class="card-body p-0">
 
+              <div class="container">
+                <div class="row justify-content-center mt-4">
+
+
+                  <!-- Search Bar Aligned Right -->
+                  <div class="row mb-3">
+                    <div class="col-12 text-end pe-4 pt-3">
+                      <input type="text" id="searchInput" class="form-control form-control-sm w-auto d-inline-block" placeholder="Search orders..." onkeyup="searchTable()" />
+                    </div>
+                  </div>
+
+                  <!-- Table -->
+                  <div class="table-responsive table-responsive-md">
+                    <table id="ordersTable" class="table table-striped mb-0">
+                      <thead>
+                        <tr style="cursor: pointer;">
+                          <th onclick="sortTable(0)">Date/Time <span class="sort-indicator"></span></th>
+                          <th onclick="sortTable(1)">Tracking ID<span class="sort-indicator"></span></th>
+                          <th onclick="sortTable(2)">Customer Name<span class="sort-indicator"></span></th>
+                          <th onclick="sortTable(3)">Block/Lot/Street/Village <span class="sort-indicator"></span></th>
+                          <th onclick="sortTable(4)">Baranggay <span class="sort-indicator"></span></th>
+                          <th onclick="sortTable(5)">City <span class="sort-indicator"></span></th>
+                          <th onclick="sortTable(6)">Province <span class="sort-indicator"></span></th>
+                          <th onclick="sortTable(7)">Country <span class="sort-indicator"></span></th>
+                          <th onclick="sortTable(8)">Parcel Quantity <span class="sort-indicator"></span></th>
+                          <th onclick="sortTable(9)">Total Amount <span class="sort-indicator"></span></th>
+                          <th onclick="sortTable(10)">Status <span class="sort-indicator"></span></th>
+                          <th onclick="sortTable(11)">Receipt <span class="sort-indicator"></span></th>
+                          <th>Action</th>
+                        </tr>
+                      </thead>
+                      <tbody id="ordersBody">
+                      </tbody>
+                    </table>
+                  </div>
+
+                </div>
+
+                <!-- Pagination -->
+                <div class="d-flex justify-content-center mt-3">
+                  <nav>
+                    <ul class="pagination" id="pagination"></ul>
+                  </nav>
+                </div>
+
+              </div>
+
+
+
+            </div>
+          </div>
+
+          <!-- Pagination -->
+          <div class="d-flex justify-content-center mt-3">
+            <nav>
+              <ul class="pagination" id="pagination"></ul>
+            </nav>
+          </div>
+        </div>
       </div>
+
+
     </div>
+  </div>
   </div>
   <!-- [ Main Content ] end -->
 
-  <?php include("customer_footer.php") ?>
+    <div id="receiptContent" style="display:none; padding:20px; font-family:Arial, sans-serif;">
+    <h4 style="text-align:center;">Order Receipt</h4>
+    <hr>
+    <table style="width:100%; border-collapse:collapse;" border="1">
+      <thead>
+        <tr style="background:#f0f0f0;">
+          <th style="padding:5px;">Date</th>
+          <th style="padding:5px;">Cart ID</th>
+          <th style="padding:5px;">Name</th>
+          <th style="padding:5px;">Address</th>
+          <th style="padding:5px;">Qty</th>
+          <th style="padding:5px;">Amount</th>
+          <th style="padding:5px;">Status</th>
+        </tr>
+      </thead>
+      <tbody id="receiptTableBody"></tbody>
+    </table>
+    <p style="margin-top:20px; font-size:12px; text-align:center;">Thank you for your order!</p>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+
+  <script>
+    async function downloadReceipt() {
+      const receiptTable = document.getElementById('receiptTableBody');
+      receiptTable.innerHTML = '';
+
+      const start = (currentPage - 1) * rowsPerPage;
+      const end = start + rowsPerPage;
+      const paginatedItems = ordersData.slice(start, end);
+
+      paginatedItems.forEach(row => {
+        const address = `${row.billing_street_village_purok}, ${row.billing_baranggay}, ${row.billing_city}, ${row.billing_province}, ${row.billing_country}`;
+        const amount = parseFloat(row.total_amount).toLocaleString(undefined, {
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2
+        });
+
+        receiptTable.innerHTML += `
+          <tr>
+            <td style="padding:5px;">${row.order_date}</td>
+            <td style="padding:5px;">${row.addcart_id}</td>
+            <td style="padding:5px;">${row.billing_lname}, ${row.billing_fname}</td>
+            <td style="padding:5px;">${address}</td>
+            <td style="padding:5px;">${row.total_quantity}</td>
+            <td style="padding:5px;">₱${amount}</td>
+            <td style="padding:5px;">${row.addcart_status}</td>
+          </tr>`;
+      });
+
+      const element = document.getElementById("receiptContent");
+      const canvas = await html2canvas(element, { scale: 2 });
+      const imageData = canvas.toDataURL("image/png");
+      const pdf = new jspdf.jsPDF("p", "mm", "a4");
+      const imgProps = pdf.getImageProperties(imageData);
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+      const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+
+      pdf.addImage(imageData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+      pdf.save("Order-Receipt.pdf");
+    }
+
+  </script>
+
 
   <!-- JQuery -->
   <script type="text/javascript" src="js/jquery-3.4.1.min.js"></script>
+  <?php include("admin_footer.php") ?>
   <script>
     let currentSortedColumn = -1;
     let currentSortDirection = "asc";
@@ -241,10 +400,9 @@ $image_src = $profile_image ? 'img/' . $profile_image : 'https://via.placeholder
     let currentPage = 1;
 
     // Fetch data from server
-    fetch('customer_fetch_orders.php')
+    fetch('admin_fetch_orders.php')
       .then(res => res.json())
       .then(data => {
-        console.log(data); //
         ordersData = data;
         displayTable(currentPage);
         setupPagination();
@@ -260,26 +418,90 @@ $image_src = $profile_image ? 'img/' . $profile_image : 'https://via.placeholder
       const paginatedItems = ordersData.slice(start, end);
 
       if (paginatedItems.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="9" class="text-center text-muted py-4">No transactions found.</td></tr>`;
-      } else {
-        paginatedItems.forEach(row => {
-          tbody.innerHTML += `
-          <tr>
-  <td>${row.order_date}</td>
-  <td>${row.addcart_id}</td>
-  <td>${row.billing_street_village_purok}</td>
-  <td>${row.billing_baranggay}</td>
-  <td>${row.billing_city}</td>
-  <td>${row.billing_province}</td>
-  <td>${row.billing_country}</td>
-  <td>${row.total_quantity}</td>
-  <td>${row.total_amount}</td>
-  <td>${row.addcart_status}</td>
-</tr>
-        `;
-        });
+        tbody.innerHTML = `<tr>
+      <td colspan="12" class="text-center text-muted py-4">
+        No transactions found.
+      </td>
+    </tr>`;
+        return;
       }
+
+      paginatedItems.forEach(row => {
+        // only show actions when status is exactly "pending"
+        const actionCell = row.addcart_status.toLowerCase() === 'pending' ?
+          `
+        <button class="btn btn-success btn-sm"
+                onclick="updateStatus(${row.order_id}, 'accepted')">
+          Accept
+        </button>
+        <button class="btn btn-danger btn-sm"
+                onclick="updateStatus(${row.order_id}, 'rejected')">
+          Reject
+        </button>` :
+          'No actions needed'; // empty if not pending
+
+        tbody.innerHTML += `
+      <tr>
+        <td>${row.order_date}</td>
+        <td>${row.addcart_id}</td>
+        <td>${row.billing_lname}, ${row.billing_fname}</td>
+        <td>${row.billing_street_village_purok}</td>
+        <td>${row.billing_baranggay}</td>
+        <td>${row.billing_city}</td>
+        <td>${row.billing_province}</td>
+        <td>${row.billing_country}</td>
+        <td>${row.total_quantity}</td>
+        <td>${parseFloat(row.total_amount)
+                     .toLocaleString(undefined, {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2
+                     })}</td>
+        <td>${row.addcart_status}</td>
+         <td>
+            <button class="btn btn-primary btn-sm"
+                    onclick='downloadReceipt(${JSON.stringify(row)})'>
+              Download
+            </button>
+          </td>
+        <td>${actionCell}</td>
+      </tr>`;
+      });
     }
+
+
+       function downloadReceipt(row) {
+  const receiptContainer = document.createElement('div');
+  receiptContainer.innerHTML = `
+    <div style="font-family: Arial, sans-serif; padding: 20px; max-width: 600px; margin: auto; border: 1px solid #ccc; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
+      <h2 style="text-align: center;">Order Receipt</h2>
+      <table style="width: 100%; margin-top: 20px; border-collapse: collapse;">
+        <tr><td style="font-weight:bold; background:#f9f9f9; border:1px solid #ddd;">Order ID</td><td style="border:1px solid #ddd;">${row.addcart_id}</td></tr>
+        <tr><td style="font-weight:bold; background:#f9f9f9; border:1px solid #ddd;">Order Date</td><td style="border:1px solid #ddd;">${row.order_date}</td></tr>
+        <tr><td style="font-weight:bold; background:#f9f9f9; border:1px solid #ddd;">Customer Name</td><td style="border:1px solid #ddd;">${row.billing_lname}, ${row.billing_fname}</td></tr>
+        <tr><td style="font-weight:bold; background:#f9f9f9; border:1px solid #ddd;">Street / Purok</td><td style="border:1px solid #ddd;">${row.billing_street_village_purok}</td></tr>
+        <tr><td style="font-weight:bold; background:#f9f9f9; border:1px solid #ddd;">Barangay</td><td style="border:1px solid #ddd;">${row.billing_baranggay}</td></tr>
+        <tr><td style="font-weight:bold; background:#f9f9f9; border:1px solid #ddd;">City</td><td style="border:1px solid #ddd;">${row.billing_city}</td></tr>
+        <tr><td style="font-weight:bold; background:#f9f9f9; border:1px solid #ddd;">Province</td><td style="border:1px solid #ddd;">${row.billing_province}</td></tr>
+        <tr><td style="font-weight:bold; background:#f9f9f9; border:1px solid #ddd;">Country</td><td style="border:1px solid #ddd;">${row.billing_country}</td></tr>
+        <tr><td style="font-weight:bold; background:#f9f9f9; border:1px solid #ddd;">Total Items</td><td style="border:1px solid #ddd;">${row.total_quantity}</td></tr>
+        <tr><td style="font-weight:bold; background:#f9f9f9; border:1px solid #ddd;">Total Amount</td><td style="border:1px solid #ddd;">₱${parseFloat(row.total_amount).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td></tr>
+        <tr><td style="font-weight:bold; background:#f9f9f9; border:1px solid #ddd;">Status</td><td style="border:1px solid #ddd;">${row.addcart_status}</td></tr>
+      </table>
+      <p style="text-align: center; margin-top: 30px;">Thank you for your purchase!</p>
+    </div>
+  `;
+
+  // Generate and save PDF
+  html2pdf()
+    .from(receiptContainer)
+    .set({
+      margin: 10,
+      filename: `receipt-${row.addcart_id}.pdf`,
+      html2canvas: { scale: 2 },
+      jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+    })
+    .save();
+}
 
 
     function searchTable() {
@@ -301,6 +523,37 @@ $image_src = $profile_image ? 'img/' . $profile_image : 'https://via.placeholder
 
         rows[i].style.display = rowContainsKeyword ? "" : "none";
       }
+    }
+
+
+    function updateStatus(orderId, status) {
+      fetch('admin_update_status.php', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            order_id: orderId,
+            status: status
+          })
+        })
+        .then(response => response.json())
+        .then(data => {
+          if (data.success) {
+            alert('Status updated successfully!');
+            // Refresh the table or update the status in the table directly
+            fetch('seller_fetch_orders.php')
+              .then(res => res.json())
+              .then(data => {
+                ordersData = data;
+                displayTable(currentPage);
+                setupPagination();
+              });
+          } else {
+            alert('Failed to update status.');
+          }
+        })
+        .catch(error => console.error('Error:', error));
     }
     // Setup pagination buttons
     function setupPagination() {
@@ -341,7 +594,7 @@ $image_src = $profile_image ? 'img/' . $profile_image : 'https://via.placeholder
         .then(res => res.json())
         .then(data => {
           const badge = document.getElementById("notificationBadge");
-          const dd = document.getElementById("notificationDropdown");
+          const dd = document.getElementById("notificationList");
 
           // 1) Update badge with unread_count
           badge.textContent = data.unread_count;
@@ -364,7 +617,7 @@ $image_src = $profile_image ? 'img/' . $profile_image : 'https://via.placeholder
              href="#"
              onclick="handleNotificationClick(${n.id}, ${n.addcart_id})">
             ${n.message}
-          </a>`;
+          </a><span style="font-size: 9px; display: inline-block; text-align: right; width: 100%; margin-right: 5px;">${n.created_at}</span>`;
             dd.appendChild(li);
           });
 
@@ -408,7 +661,6 @@ $image_src = $profile_image ? 'img/' . $profile_image : 'https://via.placeholder
     document.addEventListener("DOMContentLoaded", () => loadNotifications());
   </script>
 
-  
   <script src="asset/js/plugins/apexcharts.min.js"></script>
   <script src="asset/js/pages/dashboard-default.js"></script>
   <script src="asset/js/plugins/popper.min.js"></script>
@@ -417,11 +669,23 @@ $image_src = $profile_image ? 'img/' . $profile_image : 'https://via.placeholder
   <script src="asset/js/fonts/custom-font.js"></script>
   <script src="asset/js/pcoded.js"></script>
   <script src="asset/js/plugins/feather.min.js"></script>
-  <script>layout_change('light');</script>
-  <script>change_box_container('false');</script>
-  <script>layout_rtl_change('false');</script>
-  <script>preset_change("preset-1");</script>
-  <script>font_change("Public-Sans");</script>
+  <script>
+    layout_change('light');
+  </script>
+  <script>
+    change_box_container('false');
+  </script>
+  <script>
+    layout_rtl_change('false');
+  </script>
+  <script>
+    preset_change("preset-1");
+  </script>
+  <script>
+    font_change("Public-Sans");
+  </script>
 
 </body>
+
 </html>
+

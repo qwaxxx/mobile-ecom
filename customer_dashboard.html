@@ -152,28 +152,6 @@
 </header>
 <!-- [ Header ] end -->
 
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
-<script>
-  document.getElementById('logoutBtn1').addEventListener('click', function(e) {
-    e.preventDefault();
-    Swal.fire({
-      title: 'Are you sure?',
-      text: "You will be logged out!",
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#d33',
-      cancelButtonColor: '#6c757d',
-      confirmButtonText: 'Yes, logout',
-      background: '#ffffff',
-      color: '#000000'
-    }).then((result) => {
-      if (result.isConfirmed) {
-        window.location.href = 'logout.php'; // Your actual logout script
-      }
-    });
-  });
-</script>
 <!--header end-->
 
   <!-- [ Pre-loader ] End -->
@@ -248,6 +226,30 @@
   </div>
   <script type="text/javascript" src="js/jquery-3.4.1.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+  document.getElementById('logoutBtn1').addEventListener('click', function(e) {
+    e.preventDefault();
+    Swal.fire({
+      title: 'Are you sure?',
+      text: "You will be logged out!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#6c757d',
+      confirmButtonText: 'Yes, logout',
+      background: '#ffffff',
+      color: '#000000'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        localStorage.removeItem('user_id');
+        window.location.href = 'login_page.html'; // Your actual logout script
+      }
+    });
+  });
+</script>
   <script>
     let currentSortedColumn = -1;
     let currentSortDirection = "asc";
@@ -482,8 +484,8 @@
     function loadNotifications(all = false) {
       updateCartBadge()
       const url = all ?
-        'fetch_notification.php?all=1' :
-        'fetch_notification.php';
+        'api/fetch_notification.php?all=1' :
+        'api/fetch_notification.php';
 
       fetch(url)
         .then(res => res.json())

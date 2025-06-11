@@ -4,6 +4,7 @@ include("conn.php");
 
 // Retrieve user_id from the GET request
 $user_id = $_GET['user_id'] ?? null; // Get user_id from query parameters
+//$user_id = 9; // Get user_id from query parameters
 $limit   = isset($_GET['all']) ? 1000 : 10;
 
 if ($user_id === null) {
@@ -15,7 +16,7 @@ try {
     // 1) Get the unread count
     $countSql  = "SELECT COUNT(*) AS unread_count
                   FROM notifications
-                  WHERE user_id = ? AND status = 'read'";
+                  WHERE user_id = ? AND status = 'unread'";
     $countStmt = $conn->prepare($countSql);
     $countStmt->bind_param("i", $user_id);
     $countStmt->execute();

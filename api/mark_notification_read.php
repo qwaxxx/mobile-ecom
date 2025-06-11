@@ -1,37 +1,16 @@
 <?php
-session_start();
 header('Content-Type: application/json');
-// turn off HTML error output
-ini_set('display_errors', 0);
-error_reporting(E_ALL);
+include("conn.php");
 
-include 'conn.php';
-
-// 1) Decode JSON
-$raw  = file_get_contents('php://input');
-$data = json_decode($raw, true);
-if (json_last_error() !== JSON_ERROR_NONE) {
-    http_response_code(400);
-    echo json_encode(['success' => false, 'message' => 'Invalid JSON']);
+// Retrieve user_id from the GET request
+$user_id = $_GET['user_id'] ?? null; // Get user_id from query parameters
+$limit   = isset($_GET['all']) ? 1000 : 10;
+//$user_id = 7;
+$notif_id = $_GET['notifId'] ?? null;;
+if ($user_id === null) {
+    echo json_encode(['result' => false, 'error' => 'User ID is required']);
     exit;
 }
-
-// 2) Validate
-if (empty($data['id'])) {
-    http_response_code(400);
-    echo json_encode(['success' => false, 'message' => 'Notification ID missing']);
-    exit;
-}
-$notif_id = (int)$data['id'];
-
-// 3) Ensure user is logged in
-if (empty($_SESSION['user_id'])) {
-    http_response_code(401);
-    echo json_encode(['success' => false, 'message' => 'Unauthorized']);
-    exit;
-}
-$user_id = $_SESSION['user_id'];
-
 // 4) Verify this notification belongs to the user
 $check = $conn->prepare("SELECT user_id FROM notifications WHERE id = ?");
 $check->bind_param("i", $notif_id);

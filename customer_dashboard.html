@@ -150,15 +150,15 @@
           <a class="nav-link position-relative d-flex align-items-center" href="checkout-page.html">
             <i class="fas fa-shopping-cart fs-5 me-1"></i>
             <span class="d-none d-sm-inline-block fw-semibold">Cart</span>
-            <span id="cart-badge" class="badge bg-danger rounded-pill position-absolute top-0 start-100 translate-middle"></span>
+            <span id="cart-badge" class="badge bg-danger  rounded-pill position-absolute top-0 start-100 translate-middle"></span>
           </a>
         </li>
 
 
-        <li class="dropdown pc-h-item">
+        <li class="dropdown pc-h-item ">
           <a class="pc-head-link dropdown-toggle arrow-none position-relative" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
             <i class="ti ti-bell fs-5"></i>
-            <span id="notificationBadge" >0</span>
+            <span id="notificationBadge" class="badge bg-danger rounded-pill position-absolute top-70 start-95 translate-middle" >0</span>
           </a>
 
           <div class="dropdown-menu dropdown-menu-end pc-h-dropdown shadow dropdown-notification">
@@ -602,11 +602,6 @@
 
           // 1) Update badge with unread_count
           badge.textContent = data.unread_count;
-
-          badge.style.display = data.unread_count ?
-            'inline-block' :
-            'none';
-
           // 2) Build dropdown list of all notifications
           dd.innerHTML = '';
           if (data.notifications.length === 0) {
@@ -653,7 +648,8 @@
         updateCartBadge()
     // Example of your existing click‑handler
     function handleNotificationClick(notifId, orderId) {
-      fetch('api/mark_notification_read.php', {
+      const userId = localStorage.getItem('user_id');
+      fetch(`api/mark_notification_read.php?user_id=${userId}&notifId=${notifId}`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'

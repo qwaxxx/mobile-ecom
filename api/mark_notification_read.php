@@ -5,7 +5,7 @@ header('Content-Type: application/json');
 ini_set('display_errors', 0);
 error_reporting(E_ALL);
 
-include 'api/conn.php';
+include 'conn.php';
 
 // 1) Decode JSON
 $raw  = file_get_contents('php://input');

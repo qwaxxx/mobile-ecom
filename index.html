@@ -289,14 +289,14 @@
         }
         function createGuestIdIfNeeded() {
             //localStorage.clear(); //clear all storage
-
+           
             if (!localStorage.getItem('user_id') && !localStorage.getItem('temp_id')) {
                 const tempId = 'guest_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
                 localStorage.setItem('temp_id', tempId);
-                //alert("Guest ID: " + tempId); // Correct usage of alert
+                //alert("Temp1 ID: " + tempId); // Correct usage of alert
             }else{
                 const tempId = localStorage.getItem('temp_id');
-                //alert("Guest ID: " + tempId);
+                //alert("Temp2 ID: " + tempId);
             }
             const userNav = document.getElementById('userNav');
             const userId = localStorage.getItem('user_id');
@@ -317,7 +317,11 @@
                                     </a>
                                 </li>
                                 <li class="nav-item d-flex align-items-center">
-                                    <a class="nav-link" href="customer_dashboard.html"><span>${data.name}</span></a>
+                                    <a class="nav-link d-flex align-items-center gap-2 px-3 py-2 rounded shadow-sm text-dark bg-light hover-effect" 
+                            href="customer_dashboard.html" style="text-decoration: none;">
+                            <i class="ti ti-layout-dashboard fs-5 text-primary"></i>
+                            <span class="fw-semibold">Dashboard</span>
+                            </a>
                                     <a class="nav-link" href="#" onclick="logout()">Logout</a>
                                 </li>
                                 
@@ -352,7 +356,6 @@
             }
             window.logout = function() {
                 localStorage.removeItem('user_id');
-                
                 window.location.href = "login_page.html";
             };
 

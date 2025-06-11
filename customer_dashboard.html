@@ -27,6 +27,70 @@
       <div class="loader-fill"></div>
     </div>
   </div>
+
+<!-- [ Sidebar Menu ] start -->
+<nav class="pc-sidebar">
+  <div class="navbar-wrapper">
+    <div class="m-header">
+      <a href="index.html" class="b-brand text-primary">
+        <h5>E-commerce</h5>
+      </a>
+    </div>
+    <div class="navbar-content">
+      <ul class="pc-navbar">
+
+        <li class="pc-item">
+          <a href="customer_dashboard.html" class="pc-link">
+            <span class="pc-micon"><i class="ti ti-dashboard"></i></span>
+            <span class="pc-mtext">Dashboard</span>
+          </a>
+        </li>
+
+        <li class="pc-item">
+          <a href="index.html" class="pc-link d-flex align-items-center">
+            <span class="pc-micon me-2"><i class="ti ti-shopping-cart fs-5"></i></span>
+            <span class="pc-mtext fw-semibold">Shop</span>
+          </a>
+        </li>
+
+        <li class="pc-item pc-caption">
+          <label>Settings</label>
+          <i class="ti ti-news"></i>
+        </li>
+        <li class="pc-item">
+          <a href="customer_profile.html" class="pc-link">
+            <span class="pc-micon"><i class="ti ti-user"></i></span>
+            <span class="pc-mtext">Profile</span>
+          </a>
+        </li>
+        <li class="pc-item">
+          <a href="#" id="logoutBtn" class="pc-link">
+            <span class="pc-micon"><i class="ti ti-logout"></i></span>
+            <span class="pc-mtext">Logout</span>
+          </a>
+        </li>
+
+        <!-- <li class="pc-item">
+          <a href="" class="pc-link">
+            <span class="pc-micon"><i class="ti ti-brand-chrome"></i></span>
+            <span class="pc-mtext">Help</span>
+          </a>
+        </li> -->
+      </ul>
+      <!-- <div class="card text-center">
+        <div class="card-body">
+          <img src="../assets/images/img-navbar-card.png" alt="images" class="img-fluid mb-2">
+          <h5>Upgrade To Pro</h5>
+          <p>To get more features and components</p>
+          <a href="https://codedthemes.com/item/berry-bootstrap-5-admin-template/" target="_blank"
+          class="btn btn-success">Buy Now</a>
+        </div>
+      </div> -->
+    </div>
+  </div>
+</nav>
+<!-- [ Sidebar Menu ] end --> <!-- [ Header Topbar ] start -->
+
 <!--header-->
 <header class="pc-header">
   <div class="header-wrapper"> <!-- [Mobile Media Block] start -->
@@ -127,9 +191,8 @@
             aria-haspopup="false"
             data-bs-auto-close="outside"
             aria-expanded="false">
-            <img id="user-avatar" src="images/default.png" alt="user-image" class="user-avtar">
+            <img id="user-avatar" src="img/Profile.jpg" alt="user-image" class="user-avtar">
             <span id="user-name">Guest</span>
-
           </a>
           <div class="dropdown-menu dropdown-user-profile dropdown-menu-end pc-h-dropdown">
             <div class="tab-content" id="mysrpTabContent">
@@ -155,6 +218,9 @@
 <!--header end-->
 
   <!-- [ Pre-loader ] End -->
+
+
+
   <div class="pc-container">
     <div class="pc-content">
       <div class="row">
@@ -204,6 +270,8 @@
       </div>
     </div>
   </div>
+ 
+
   <!-- [ Main Content ] end -->
    <div id="receiptContent" style="display:none; padding:20px; font-family:Arial, sans-serif;">
     <h4 style="text-align:center;">Order Receipt</h4>
@@ -226,10 +294,28 @@
   </div>
   <script type="text/javascript" src="js/jquery-3.4.1.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-  
+
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>
+  document.getElementById('logoutBtn').addEventListener('click', function(e) {
+    e.preventDefault();
+    Swal.fire({
+      title: 'Are you sure?',
+      text: "You will be logged out!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#6c757d',
+      confirmButtonText: 'Yes, logout',
+      background: '#ffffff',
+      color: '#000000'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        window.location.href = 'login_page.html'; // Your actual logout script
+      }
+    });
+  });
   document.getElementById('logoutBtn1').addEventListener('click', function(e) {
     e.preventDefault();
     Swal.fire({
@@ -357,6 +443,24 @@
   .catch(error => {
     console.error("Error fetching orders:", error);
   });
+
+
+
+  if (userId) {
+    fetch(`api/fetch_user.php?user_id=${userId}`)
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          document.getElementById("user-name").textContent = data.name;
+        } else {
+          console.error("Error:", data.error);
+        }
+      })
+      .catch(error => {
+        console.error("Fetch error:", error);
+      });
+  }
+
 // Display paginated table
   function displayTable(page) {
     const tbody = document.getElementById('ordersBody');
@@ -482,19 +586,23 @@
 
   <script>
     function loadNotifications(all = false) {
+      const userId = localStorage.getItem('user_id');
       updateCartBadge()
       const url = all ?
-        'api/fetch_notification.php?all=1' :
-        'api/fetch_notification.php';
+        `api/fetch_notification.php?all=1&user_id=${userId}` :
+        `api/fetch_notification.php?&user_id=${userId}`;
 
       fetch(url)
+      
         .then(res => res.json())
         .then(data => {
+          alert(data.unread_count);
           const badge = document.getElementById("notificationBadge");
           const dd = document.getElementById("notificationList");
 
           // 1) Update badge with unread_count
           badge.textContent = data.unread_count;
+
           badge.style.display = data.unread_count ?
             'inline-block' :
             'none';
@@ -545,7 +653,7 @@
         updateCartBadge()
     // Example of your existing click‑handler
     function handleNotificationClick(notifId, orderId) {
-      fetch('mark_notification_read.php', {
+      fetch('api/mark_notification_read.php', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
@@ -568,6 +676,7 @@
     var lastNotificationTime = 0;
 
     function getNotification() {
+      
       // Check if the browser supports notifications
       if (!("Notification" in window)) {
         $('body').append('<h4 style="color:red">*Browser does not support Web Notification</h4>');
@@ -580,12 +689,14 @@
       } else {
         // Get the current time
         var currentTime = Date.now();
-
+        const userId = localStorage.getItem('user_id');
         // Check if 2 minutes have passed since the last notification
         if (currentTime - lastNotificationTime >= 120000) { // 120000 ms = 2 minutes
           $.ajax({
-            url: "fetch_notification.php",
+            url: "api/fetch_notification.php",
             type: "POST",
+            contentType: "application/json",
+            data: JSON.stringify({ user_id: userId }),
             success: function(response) {
               if (response.result === true) {
                 var notificationDetails = response.notifications;

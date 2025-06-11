@@ -1,31 +1,28 @@
 <?php
-session_start();
 header('Content-Type: application/json');
-include("api/conn.php");
+include("conn.php");
 
-// Validate session
-if (!isset($_SESSION['user_id'])) {
-    echo json_encode([
-        'result' => false,
-        'error' => 'Unauthorized: User not logged in.'
-    ]);
+// Retrieve user_id from the GET request
+$user_id = $_GET['user_id'] ?? null; // Get user_id from query parameters
+$limit   = isset($_GET['all']) ? 1000 : 10;
+
+if ($user_id === null) {
+    echo json_encode(['result' => false, 'error' => 'User ID is required']);
     exit;
 }
-
-$user_id = $_SESSION['user_id'];
-$limit   = isset($_GET['all']) ? 1000 : 10;
 
 try {
     // 1) Get the unread count
     $countSql  = "SELECT COUNT(*) AS unread_count
                   FROM notifications
-                  WHERE user_id = ? AND status = 'unread'";
+                  WHERE user_id = ? AND status = 'read'";
     $countStmt = $conn->prepare($countSql);
     $countStmt->bind_param("i", $user_id);
     $countStmt->execute();
     $countResult = $countStmt->get_result();
     $countRow = $countResult->fetch_assoc();
     $unread_count = (int)$countRow['unread_count'];
+
 
     // 2) Fetch the notifications themselves
     $sql = "SELECT 

@@ -138,12 +138,7 @@
         </form>
       </div>
     </li>
-    <li class="pc-h-item d-none d-md-inline-flex">
-      <form class="header-search">
-        <i data-feather="search" class="icon-search"></i>
-        <input type="search" class="form-control" placeholder="Search here. . .">
-      </form>
-    </li>
+   
   </ul>
 </div>
 <!-- [Mobile Media Block end] -->
@@ -185,7 +180,7 @@
         data-bs-auto-close="outside"
         aria-expanded="false"
       >
-         <img id="userProfilePreview_<?php echo uniqid(); ?>" src="https://via.placeholder.com/150" alt="User profile image" class="user-avtar">
+     <img id="userProfilePreview_<?php echo uniqid(); ?>" src="https://via.placeholder.com/150" alt="User profile image" class="user-avtar">
         <span id="userProfileName_<?php echo uniqid(); ?>"></span>
       
       </a>
@@ -808,7 +803,7 @@
  <!-- NEW SCRIPT -->
 
 <script>
-  fetch('https://orchid-chinchilla-614427.hostingersite.com/markrey/api/admin_fetch_stats.php')
+  fetch('http://localhost/mobile-ecom/api/admin_fetch_stats.php')
     .then(res => res.json())
     .then(data => {
       document.getElementById('totalUsers').textContent = data.users.toLocaleString();
@@ -870,11 +865,19 @@
   });
   
 </script>
+  
+
+ <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const userId = localStorage.getItem('user_id');
+      alert( userId);
+    });
+  </script>
 
   <script>
     (function() {
         // Unique constants for this instance
-        const PROFILE_WIDGET_API_BASE = 'https://orchid-chinchilla-614427.hostingersite.com/markrey/api';
+        const PROFILE_WIDGET_API_BASE = 'http://localhost/mobile-ecom/api';
         const PROFILE_USER_ID = localStorage.getItem('user_id');
         
         // Get elements with unique IDs
@@ -908,6 +911,7 @@
         loadUserProfileWidget();
     })();
 </script>
+
 </body>
 
 </html>

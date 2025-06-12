@@ -4,12 +4,13 @@ include("conn.php");
 
 // Retrieve input
 $input = json_decode(file_get_contents('php://input'), true);
-$user_id = $input['userId'] ?? null; 
-$search = $input['search'] ?? ''; 
-$price = $input['price'] ?? ''; 
-$page = $input['page'] ?? 1; 
-$limit = 12; 
-$offset = ($page - 1) * $limit; 
+//$user_id = 8; // Fetch user ID from JSON input
+$user_id = $input['userId'] ?? null; // Fetch user ID from JSON input
+$search = $input['search'] ?? ''; // Fetch search term from JSON input
+$price = $input['price'] ?? ''; // Fetch price filter from JSON input
+$page = $input['page'] ?? 1; // Fetch current page from JSON input
+$limit = 12; // Set number of items per page
+$offset = ($page - 1) * $limit; // Calculate offset for pagination
 
 $response = [
     'success' => false,
@@ -65,6 +66,7 @@ if ($user_id) {
 
     if ($result->num_rows > 0) {
         while ($row = $result->fetch_assoc()) {
+            // Format product data
             $row['prod_picture'] = $row['prod_picture'] ?? ''; // Ensure picture is set
             $response['products'][] = $row;
         }

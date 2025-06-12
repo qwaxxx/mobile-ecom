@@ -46,114 +46,152 @@
     </div>
     <!-- [ Pre-loader ] End -->
 
-    <?php include("seller_slidebar.php") ?>
-    <!-- [ Header Topbar ] start -->
-
-  <header class="pc-header">
-  <div class="header-wrapper"> <!-- [Mobile Media Block] start -->
-    <div class="me-auto pc-mob-drp">
-      <ul class="list-unstyled">
-        <!-- ======= Menu collapse Icon ===== -->
-        <li class="pc-h-item pc-sidebar-collapse">
-          <a href="#" class="pc-head-link ms-0" id="sidebar-hide">
-            <i class="ti ti-menu-2"></i>
-          </a>
-        </li>
-        <li class="pc-h-item pc-sidebar-popup">
-          <a href="#" class="pc-head-link ms-0" id="mobile-collapse">
-            <i class="ti ti-menu-2"></i>
-          </a>
-        </li>
-        <li class="dropdown pc-h-item d-inline-flex d-md-none">
-          <a
-            class="pc-head-link dropdown-toggle arrow-none m-0"
-            data-bs-toggle="dropdown"
-            href="#"
-            role="button"
-            aria-haspopup="false"
-            aria-expanded="false">
-            <i class="ti ti-search"></i>
-          </a>
-          <div class="dropdown-menu pc-h-dropdown drp-search">
-            <form class="px-3">
-              <div class="form-group mb-0 d-flex align-items-center">
-                <i data-feather="search"></i>
-                <input type="search" class="form-control border-0 shadow-none" placeholder="Search here. . .">
-              </div>
-            </form>
-          </div>
-        </li>
-        <li class="pc-h-item d-none d-md-inline-flex">
-          <form class="header-search">
-            <i data-feather="search" class="icon-search"></i>
-            <input type="search" class="form-control" placeholder="Search here. . .">
-          </form>
-        </li>
-      </ul>
+<!-- [ Sidebar Menu ] start -->
+<nav class="pc-sidebar">
+  <div class="navbar-wrapper">
+    <div class="m-header">
+      <a href="" class="b-brand text-primary">
+        <h5>E-commerce</h5>
+      </a>
     </div>
-    <!-- [Mobile Media Block end] -->
-    <div class="ms-auto">
-      <ul class="list-unstyled">
+    <div class="navbar-content">
+      <ul class="pc-navbar">
 
-        <li class="dropdown pc-h-item">
-          <a class="pc-head-link dropdown-toggle arrow-none position-relative" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
-            <i class="ti ti-bell fs-5"></i>
-            <span id="notificationBadge" class="badge bg-danger rounded-pill position-absolute top-70 start-95 translate-middle"  >0</span>
+        <li class="pc-item">
+          <a href="seller_dashboard.html" class="pc-link">
+            <span class="pc-micon"><i class="ti ti-dashboard"></i></span>
+            <span class="pc-mtext">Dashboard</span>
           </a>
-
-          <div class="dropdown-menu dropdown-menu-end pc-h-dropdown shadow dropdown-notification">
-            <div class="dropdown-header d-flex align-items-center justify-content-between px-3 py-2">
-              <h6 class="mb-0 fw-semibold text-dark">Notifications</h6>
-              <a href="#" class="text-danger" onclick="clearNotifications(event)">
-                <i class="ti ti-x fs-6"></i>
-              </a>
-            </div>
-            <div class="dropdown-divider my-0"></div>
-
-            <div class="px-2 py-1 overflow-auto" style="max-height: calc(100vh - 215px);" id="notificationList">
-            
-            </div>
-
-            <div class="dropdown-divider my-0"></div>
-            <div class="text-center py-2">
-              <a href="#" class="text-primary fw-semibold small">View All</a>
-            </div>
-          </div>
+        </li>
+        <li class="pc-item">
+          <a href="seller_transaction.html" class="pc-link">
+            <span class="pc-micon"><i class="ti ti-history"></i></span>
+            <span class="pc-mtext">Transaction</span>
+          </a>
         </li>
 
-
-        <li class="dropdown pc-h-item header-user-profile">
-          <a
-            class="pc-head-link dropdown-toggle arrow-none me-0"
-            data-bs-toggle="dropdown"
-            href="#"
-            role="button"
-            aria-haspopup="false"
-            data-bs-auto-close="outside"
-            aria-expanded="false">
-            <img src="" alt="user-image" class="user-avtar">
-            <span></span>
-          </a>
-          <div class="dropdown-menu dropdown-user-profile dropdown-menu-end pc-h-dropdown">
-            <div class="tab-content" id="mysrpTabContent">
-              <div class="tab-pane fade show active" id="drp-tab-1" role="tabpanel" aria-labelledby="drp-t1" tabindex="0">
-                <a href="seller_profile.html" class="dropdown-item">
-                  <i class="ti ti-user"></i>
-                  <span>View Profile</span>
-                </a>
-                <a href="#" id="logoutBtn1" class="dropdown-item">
-                  <i class="ti ti-power"></i>
-                  <span>Logout</span>
-                </a>
-              </div>
-            </div>
-          </div>
+        <li class="pc-item pc-caption">
+          <label>Settings</label>
+          <i class="ti ti-news"></i>
         </li>
+        <li class="pc-item">
+          <a href="seller_profile.html" class="pc-link">
+            <span class="pc-micon"><i class="ti ti-user"></i></span>
+            <span class="pc-mtext">Profile</span>
+          </a>
+        </li>
+        <li class="pc-item">
+          <a href="#" id="logoutBtn" class="pc-link">
+            <span class="pc-micon"><i class="ti ti-logout"></i></span>
+            <span class="pc-mtext">Logout</span>
+          </a>
+        </li>
+
+        <!-- <li class="pc-item">
+          <a href="" class="pc-link">
+            <span class="pc-micon"><i class="ti ti-brand-chrome"></i></span>
+            <span class="pc-mtext">Help</span>
+          </a>
+        </li> -->
       </ul>
+      <!-- <div class="card text-center">
+        <div class="card-body">
+          <img src="../assets/images/img-navbar-card.png" alt="images" class="img-fluid mb-2">
+          <h5>Upgrade To Pro</h5>
+          <p>To get more features and components</p>
+          <a href="https://codedthemes.com/item/berry-bootstrap-5-admin-template/" target="_blank"
+          class="btn btn-success">Buy Now</a>
+        </div>
+      </div> -->
     </div>
   </div>
-</header>
-<!-- [ Header ] end -->
+</nav>
+<!-- [ Sidebar Menu ] end -->
+    <!-- [ Header Topbar ] start -->
+
+    <header class="pc-header">
+        <div class="header-wrapper">
+            <div class="me-auto pc-mob-drp">
+                <ul class="list-unstyled">
+                    <li class="pc-h-item pc-sidebar-collapse">
+                        <a href="#" class="pc-head-link ms-0" id="sidebar-hide">
+                            <i class="ti ti-menu-2"></i>
+                        </a>
+                    </li>
+                    <li class="pc-h-item pc-sidebar-popup">
+                        <a href="#" class="pc-head-link ms-0" id="mobile-collapse">
+                            <i class="ti ti-menu-2"></i>
+                        </a>
+                    </li>
+                    <li class="dropdown pc-h-item d-inline-flex d-md-none">
+                        <a class="pc-head-link dropdown-toggle arrow-none m-0" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="false" aria-expanded="false">
+                            <i class="ti ti-search"></i>
+                        </a>
+                        <div class="dropdown-menu pc-h-dropdown drp-search">
+                            <form class="px-3">
+                                <div class="form-group mb-0 d-flex align-items-center">
+                                    <i data-feather="search"></i>
+                                    <input type="search" class="form-control border-0 shadow-none" placeholder="Search here. . .">
+                                </div>
+                            </form>
+                        </div>
+                    </li>
+                    <li class="pc-h-item d-none d-md-inline-flex">
+                        <form class="header-search">
+                            <i data-feather="search" class="icon-search"></i>
+                            <input type="search" class="form-control" placeholder="Search here. . .">
+                        </form>
+                    </li>
+                </ul>
+            </div>
+            <div class="ms-auto">
+                <ul class="list-unstyled">
+                    <li class="dropdown pc-h-item">
+                        <a class="pc-head-link dropdown-toggle arrow-none position-relative" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                            <i class="ti ti-bell fs-5"></i>
+                            <span id="notificationBadge" class="badge bg-danger rounded-pill position-absolute top-70 start-95 translate-middle"  >0</span>
+                        </a>
+
+                        <div class="dropdown-menu dropdown-menu-end pc-h-dropdown shadow dropdown-notification">
+                            <div class="dropdown-header d-flex align-items-center justify-content-between px-3 py-2">
+                                <h6 class="mb-0 fw-semibold text-dark">Notifications</h6>
+                                <a href="#" class="text-danger" onclick="clearNotifications(event)">
+                                    <i class="ti ti-x fs-6"></i>
+                                </a>
+                            </div>
+                            <div class="dropdown-divider my-0"></div>
+                            <div class="px-2 py-1 overflow-auto" style="max-height: calc(100vh - 215px);" id="notificationList"></div>
+                            <div class="dropdown-divider my-0"></div>
+                            <div class="text-center py-2">
+                                <a href="#" class="text-primary fw-semibold small">View All</a>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="dropdown pc-h-item header-user-profile">
+                        <a class="pc-head-link dropdown-toggle arrow-none me-0" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="false" data-bs-auto-close="outside" aria-expanded="false">
+                            <img src="" alt="user-image" class="user-avtar">
+                            <span></span>
+                        </a>
+                        <div class="dropdown-menu dropdown-user-profile dropdown-menu-end pc-h-dropdown">
+                            <div class="tab-content" id="mysrpTabContent">
+                                <div class="tab-pane fade show active" id="drp-tab-1" role="tabpanel" aria-labelledby="drp-t1" tabindex="0">
+                                    <a href="seller_profile.html" class="dropdown-item">
+                                        <i class="ti ti-user"></i>
+                                        <span>View Profile</span>
+                                    </a>
+                                    <a href="#" id="logoutBtn1" class="dropdown-item">
+                                        <i class="ti ti-power"></i>
+                                        <span>Logout</span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </header>
+    <!-- [ Header ] end -->
 
     <!-- [ Main Content ] start -->
     <div class="pc-container">
@@ -202,7 +240,6 @@
     </div>
     <!-- [ Main Content ] end -->
 
-    <!-- Modal for adding products -->
     <div class="modal fade" id="addproduct" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -212,79 +249,307 @@
                 </div>
                 <div class="modal-body">
                     <form id="addProductForm" enctype="multipart/form-data">
-                        <div class="form-group">
+                        <div class="form-group mb-3">
                             <label for="prod_name">Product Name</label>
                             <input type="text" name="prod_name" class="form-control" required>
                         </div>
-                        <div class="form-group">
+                        <div class="form-group mb-3">
                             <label for="prod_price">Price</label>
                             <input type="number" name="prod_price" class="form-control" required>
                         </div>
-                        <div class="form-group">
+                        <div class="form-group mb-3">
                             <label for="prod_stock">Stock</label>
                             <input type="number" name="prod_stock" class="form-control" required>
                         </div>
-                        <div class="form-group">
+                        <div class="form-group mb-3">
                             <label for="prod_description">Description</label>
                             <textarea name="prod_description" class="form-control" rows="3" required></textarea>
                         </div>
-                        <div class="form-group">
+                        <div class="form-group mb-3">
                             <label for="prod_picture">Product Image</label>
-                            <input type="file" name="prod_picture" class="form-control-file" accept="image/*" required>
+                            <input type="file" name="prod_picture" class="form-control" accept="image/*" required>
                         </div>
                         <button type="submit" class="btn btn-primary">Add Product</button>
                     </form>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                </div>
             </div>
         </div>
     </div>
-     <script type="text/javascript" src="js/jquery-3.4.1.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <!-- JQuery -->
-   
-    <script>
-  document.getElementById('logoutBtn').addEventListener('click', function(e) {
-    e.preventDefault();
-    Swal.fire({
-      title: 'Are you sure?',
-      text: "You will be logged out!",
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#d33',
-      cancelButtonColor: '#6c757d',
-      confirmButtonText: 'Yes, logout',
-      background: '#ffffff',
-      color: '#000000'
-    }).then((result) => {
-      if (result.isConfirmed) {
-        localStorage.removeItem('user_id');
-        window.location.href = 'login_page.html'; // Your actual logout script
-      }
+
+<!-- Modal for editing products -->
+<div class="modal fade" id="editProductModal" tabindex="-1" aria-labelledby="editProductModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editProductModalLabel">Edit Product</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="editProductForm" enctype="multipart/form-data">
+                    <input type="hidden" id="editProductId" name="prod_id">
+                    <div class="form-group mb-3">
+                        <label for="edit_prod_name">Product Name</label>
+                        <input type="text" id="edit_prod_name" name="prod_name" class="form-control" required>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="edit_prod_price">Price</label>
+                        <input type="number" id="edit_prod_price" name="prod_price" class="form-control" required>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="edit_prod_stock">Stock</label>
+                        <input type="number" id="edit_prod_stock" name="prod_stock" class="form-control" required>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="edit_prod_description">Description</label>
+                        <textarea id="edit_prod_description" name="prod_description" class="form-control" rows="3" required></textarea>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="edit_prod_picture">Product Image</label>
+                        <input type="file" id="edit_prod_picture" name="prod_picture" class="form-control" accept="image/*">
+                        <small class="text-muted">Leave empty to keep current image</small>
+                        <div id="currentImageContainer" class="mt-2"></div>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Update Product</button>
+                </form>
+                <!-- <div id="editProductResponse" class="mt-3"></div> -->
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <script src="js/jquery-3.4.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="js/bootstrap.bundle.min.js"></script>
+<script>
+$(document).ready(function() {
+    updateCartBadge()
+    $('#editProductForm').on('submit', function(e) {
+        e.preventDefault();
+        
+        const formData = new FormData(this);
+        
+        $.ajax({
+            url: 'api/edit_product.php',
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            dataType: 'json',
+            success: function(response) {
+                if (response.status === 'success') {
+                    // Just reload the page
+                    location.reload();
+                } else {
+                    alert(response.message);
+                }
+            },
+            error: function(xhr, status, error) {
+                alert('An error occurred: ' + error);
+            }
+        });
     });
-  });
-  document.getElementById('logoutBtn1').addEventListener('click', function(e) {
-    e.preventDefault();
-    Swal.fire({
-      title: 'Are you sure?',
-      text: "You will be logged out!",
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#d33',
-      cancelButtonColor: '#6c757d',
-      confirmButtonText: 'Yes, logout',
-      background: '#ffffff',
-      color: '#000000'
-    }).then((result) => {
-      if (result.isConfirmed) {
-        localStorage.removeItem('user_id');
-        window.location.href = 'login_page.html'; // Your actual logout script
-      }
+
+    $('#editProductModal').on('show.bs.modal', function(event) {
+        const button = $(event.relatedTarget);
+        const currentImage = button.data('current-image');
+        
+        if (currentImage) {
+            $('#currentImageContainer').html(`
+                <p>Current Image:</p>
+                <img src="${currentImage}" class="img-thumbnail" style="max-height: 150px;">
+            `);
+        } else {
+            $('#currentImageContainer').html('<p>No current image</p>');
+        }
     });
-  });
+
+    $('#editProductModal').on('hidden.bs.modal', function() {
+        $('#editProductForm')[0].reset();
+        $('#currentImageContainer').empty();
+    });
+});
 </script>
+
+
+
+    <script>
+        // Initialize variables
+        let currentProducts = [];
+        let currentPage = 1;
+        let currentSearch = '';
+        let currentPrice = '';
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const userId = localStorage.getItem('user_id');
+            loadProducts(userId);
+            updateCartBadge()
+            // Event Listeners
+            $('#search').on('keyup', function() {
+                loadProducts(userId, $('#search').val(), $('#price_range').val(), 1);
+            });
+
+            $('#price_range').on('change', function() {
+                loadProducts(userId, $('#search').val(), $('#price_range').val(), 1);
+            });
+
+            $('#showAll').on('click', function(e) {
+                e.preventDefault();
+                $('#search').val('');
+                $('#price_range').val('');
+                loadProducts(userId);
+            });
+
+            $('#addProductForm').on('submit', function(e) {
+                e.preventDefault();
+                const formData = new FormData(this);
+                formData.append('prod_user_id', userId);
+
+                $.ajax({
+                    url: 'api/add_product.php',
+                    type: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function(response) {
+                        alert('Product added successfully!');
+                        $('#addproduct').modal('hide');
+                        $('#addProductForm')[0].reset();
+                        loadProducts(userId);
+                    },
+                    error: function(xhr, status, error) {
+                        alert('Error: ' + error);
+                        console.error(xhr.responseText);
+                    }
+                });
+            });
+
+            
+        });
+
+        function loadProducts(userId, search = '', price = '', page = 1) {
+            updateCartBadge()
+            $.ajax({
+                url: `api/seller_fetch_products.php`,
+                method: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({
+                    userId: userId,
+                    search: search,
+                    price: price,
+                    page: page
+                }),
+                success: function(response) {
+                    if (response.success) {
+                        $('#productContainer').empty();
+                        let productHtml = '<div class="row">';
+                        response.products.forEach(product => {
+                            productHtml += `
+                                <div class="col-lg-3 col-md-6 mb-4">
+                                    <div class="card h-100" onclick="openEditModal(${product.prod_id}, '${product.prod_name}', ${product.prod_price}, ${product.prod_stock}, '${product.prod_description}', '${product.prod_picture}')">
+                                        <img src="${product.prod_picture}" class="card-img-top" alt="${product.prod_name}">
+                                        <div class="card-body text-center">
+                                            <h5>${product.prod_name}</h5>
+                                            <p>₱ ${product.prod_price}</p>
+                                            <p>${product.prod_description}</p>
+                                        </div>
+                                    </div>
+                                </div>`;
+                        });
+                        productHtml += '</div>';
+                        $('#productContainer').html(productHtml);
+                        setupPagination(response.pagination);
+                    } else {
+                        $('#productContainer').html('<p class="text-center">' + response.message + '</p>');
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error loading products:', error);
+                    $('#productContainer').html('<p class="text-center">Error loading products.</p>');
+                }
+            });
+        }
+
+        function setupPagination(pagination) {
+            const paginationContainer = $('#pagination');
+            paginationContainer.empty();
+
+            let paginationHtml = '<nav class="d-flex justify-content-center mt-4"><ul class="pagination pg-blue">';
+            if (pagination.currentPage > 1) {
+                paginationHtml += `<li class="page-item"><a class="page-link pagination-link" href="#" data-page="${pagination.currentPage - 1}" aria-label="Previous">&laquo;</a></li>`;
+            } else {
+                paginationHtml += `<li class="page-item disabled"><a class="page-link" href="#" aria-label="Previous">&laquo;</a></li>`;
+            }
+
+            for (let i = 1; i <= pagination.totalPages; i++) {
+                const active = (i === pagination.currentPage) ? 'active' : '';
+                paginationHtml += `<li class="page-item ${active}"><a class="page-link pagination-link" href="#" data-page="${i}">${i}</a></li>`;
+            }
+
+            if (pagination.currentPage < pagination.totalPages) {
+                paginationHtml += `<li class="page-item"><a class="page-link pagination-link" href="#" data-page="${pagination.currentPage + 1}" aria-label="Next">&raquo;</a></li>`;
+            } else {
+                paginationHtml += `<li class="page-item disabled"><a class="page-link" href="#" aria-label="Next">&raquo;</a></li>`;
+            }
+
+            paginationHtml += '</ul></nav>';
+            paginationContainer.html(paginationHtml);
+        }
+
+        function openEditModal(prodId, prodName, prodPrice, prodStock, prodDescription, prodPicture) {
+            document.getElementById('editProductId').value = prodId;
+            document.getElementById('edit_prod_name').value = prodName;
+            document.getElementById('edit_prod_price').value = prodPrice;
+            document.getElementById('edit_prod_stock').value = prodStock;
+            document.getElementById('edit_prod_description').value = prodDescription;
+
+            // Show the edit modal
+            const editModal = new bootstrap.Modal(document.getElementById('editProductModal'));
+            editModal.show();
+        }
+
+        // Logout functionality
+        document.getElementById('logoutBtn').addEventListener('click', function(e) {
+            e.preventDefault();
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You will be logged out!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#6c757d',
+                confirmButtonText: 'Yes, logout',
+                background: '#ffffff',
+                color: '#000000'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    localStorage.removeItem('user_id');
+                    window.location.href = 'login_page.html'; // Your actual logout script
+                }
+            });
+        });
+        document.getElementById('logoutBtn1').addEventListener('click', function(e) {
+            e.preventDefault();
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You will be logged out!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#6c757d',
+                confirmButtonText: 'Yes, logout',
+                background: '#ffffff',
+                color: '#000000'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    localStorage.removeItem('user_id');
+                    window.location.href = 'login_page.html'; // Your actual logout script
+                }
+            });
+        });
+
+    </script>
  <script>
     function loadNotifications(all = false) {
       const userId = localStorage.getItem('user_id');
@@ -349,6 +614,7 @@
         updateCartBadge()
     // Example of your existing click‑handler
     function handleNotificationClick(notifId, orderId) {
+        updateCartBadge()
       const userId = localStorage.getItem('user_id');
       fetch(`api/mark_notification_read.php?user_id=${userId}&notifId=${notifId}`, {
           method: 'POST',
@@ -434,157 +700,31 @@
     // Call the notification function every 2 minutes
     document.addEventListener("DOMContentLoaded", () => loadNotifications());
   </script>
-    <script>
-        $(document).ready(function() {
-            loadProducts();
-
-            $('#search').on('keyup', function() {
-                loadProducts($('#search').val(), $('#price_range').val(), 1);
-            });
-
-            $('#price_range').on('change', function() {
-                loadProducts($('#search').val(), $('#price_range').val(), 1);
-            });
-
-            $('#showAll').on('click', function(e) {
-                e.preventDefault();
-                $('#search').val('');
-                $('#price_range').val('');
-                loadProducts();
-            });
-
-            // Handle pagination click (delegate since it’s loaded via AJAX)
-            $(document).on('click', '.pagination-link', function(e) {
-                e.preventDefault();
-                const page = $(this).data('page');
-                loadProducts($('#search').val(), $('#price_range').val(), page);
-            });
-
-            function loadProducts(search = '', price = '', page = 1) {
-                const userId = localStorage.getItem('user_id');
-                $.ajax({
-                    url: `api/seller_fetch_products.php`,
-                    method: 'POST',
-                    contentType: 'application/json', // Set content type to JSON
-                    data: JSON.stringify({
-                        userId: userId,
-                        search: search,
-                        price: price,
-                        page: page
-                    }),
-                    success: function(response) {
-                        if (response.success) {
-                            $('#productContainer').empty();
-                            let productHtml = '<div class="row">';
-                            response.products.forEach(product => {
-                                const modalId = "productModal" + product.prod_id;
-                                productHtml += `
-                                    <div class="col-lg-3 col-md-6 mb-4 d-flex">
-                                        <div class="card h-100 w-100" data-bs-toggle="modal" data-bs-target="#${modalId}" style="cursor:pointer;">
-                                            <div class="view overlay">
-                                                <img src="${product.prod_picture}" class="card-img-top" alt="">
-                                            </div>
-                                            <div class="card-body text-center">
-                                                <h5>${product.prod_stock} in stock</h5>
-                                                <h5><strong>${product.prod_name}</strong></h5>
-                                                <p>${product.prod_description}</p>
-                                                <p>₱ ${product.prod_price}</p>
-                                            </div>
-                                        </div>
-                                    </div>`;
-                            });
-                            productHtml += '</div>'; // Close the row
-                            $('#productContainer').html(productHtml); // Add products to the container
-
-                            setupPagination(response.pagination);
-                        } else {
-                            $('#productContainer').html('<p class="text-center">' + response.message + '</p>');
-                        }
-                    },
-                    error: function(xhr, status, error) {
-                        console.error('Error loading products:', error);
-                        $('#productContainer').html('<p class="text-center">Error loading products.</p>');
-                    }
-                });
-            }
-
-            function setupPagination(pagination) {
-                const paginationContainer = $('#pagination');
-                paginationContainer.empty(); // Clear previous pagination
-
-                let paginationHtml = '<nav class="d-flex justify-content-center mt-4"><ul class="pagination pg-blue">';
-                
-                // Previous button
-                if (pagination.currentPage > 1) {
-                    paginationHtml += `<li class="page-item"><a class="page-link pagination-link" href="#" data-page="${pagination.currentPage - 1}" aria-label="Previous">&laquo;</a></li>`;
-                } else {
-                    paginationHtml += `<li class="page-item disabled"><a class="page-link" href="#" aria-label="Previous">&laquo;</a></li>`;
-                }
-
-                // Page number links
-                for (let i = 1; i <= pagination.totalPages; i++) {
-                    const active = (i === pagination.currentPage) ? 'active' : '';
-                    paginationHtml += `<li class="page-item ${active}"><a class="page-link pagination-link" href="#" data-page="${i}">${i}</a></li>`;
-                }
-
-                // Next button
-                if (pagination.currentPage < pagination.totalPages) {
-                    paginationHtml += `<li class="page-item"><a class="page-link pagination-link" href="#" data-page="${pagination.currentPage + 1}" aria-label="Next">&raquo;</a></li>`;
-                } else {
-                    paginationHtml += `<li class="page-item disabled"><a class="page-link" href="#" aria-label="Next">&raquo;</a></li>`;
-                }
-
-                paginationHtml += '</ul></nav>';
-                paginationContainer.html(paginationHtml); // Add pagination to the container
-            }
-
-            // Handle product addition
-             $('#addproduct').on('submit', function(e) {
-                e.preventDefault(); // Prevent normal form submission
-                addProduct(); // Call the function to add the product
-            });
-            function addProduct(form) {
-                const formData = new FormData(form);
-                fetch('api/seller_uploadprod.php', {
-                    method: 'POST',
-                    body: formData
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        alert(data.message);
-                        loadProducts();
-                        $('#addproduct').modal('hide');
-                    } else {
-                        alert(data.message);
-                    }
-                })
-                .catch(error => {
-                    console.error('Error adding product:', error);
-                    alert('An error occurred while adding the product.');
-                });
-            }
-        });
-
-    </script>
-
-    <?php include("seller_footer.php") ?>
+    <?php include("seller_footer.php"); ?>
 
     <script src="asset/js/plugins/apexcharts.min.js"></script>
-    <script src="asset/js/pages/dashboard-default.js"></script>
-    <script src="asset/js/plugins/popper.min.js"></script>
-    <script src="asset/js/plugins/simplebar.min.js"></script>
-    <script src="asset/js/plugins/bootstrap.min.js"></script>
-    <script src="asset/js/fonts/custom-font.js"></script>
-    <script src="asset/js/pcoded.js"></script>
-    <script src="asset/js/plugins/feather.min.js"></script>
-    <script>
-        layout_change('light');
-        change_box_container('false');
-        layout_rtl_change('false');
-        preset_change("preset-1");
-        font_change("Public-Sans");
-    </script>
+  <script src="asset/js/pages/dashboard-default.js"></script>
+  <script src="asset/js/plugins/popper.min.js"></script>
+  <script src="asset/js/plugins/simplebar.min.js"></script>
+  <script src="asset/js/plugins/bootstrap.min.js"></script>
+  <script src="asset/js/fonts/custom-font.js"></script>
+  <script src="asset/js/pcoded.js"></script>
+  <script src="asset/js/plugins/feather.min.js"></script>
+  <script>
+    layout_change('light');
+  </script>
+  <script>
+    change_box_container('false');
+  </script>
+  <script>
+    layout_rtl_change('false');
+  </script>
+  <script>
+    preset_change("preset-1");
+  </script>
+  <script>
+    font_change("Public-Sans");
+  </script>
 </body>
 
 </html>

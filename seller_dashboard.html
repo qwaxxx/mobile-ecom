@@ -136,12 +136,7 @@
                             </form>
                         </div>
                     </li>
-                    <li class="pc-h-item d-none d-md-inline-flex">
-                        <form class="header-search">
-                            <i data-feather="search" class="icon-search"></i>
-                            <input type="search" class="form-control" placeholder="Search here. . .">
-                        </form>
-                    </li>
+                  
                 </ul>
             </div>
             <div class="ms-auto">
@@ -169,8 +164,8 @@
                     </li>
                     <li class="dropdown pc-h-item header-user-profile">
                         <a class="pc-head-link dropdown-toggle arrow-none me-0" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="false" data-bs-auto-close="outside" aria-expanded="false">
-                            <img src="" alt="user-image" class="user-avtar">
-                            <span></span>
+                           <img id="userProfilePreview" src="https://orchid-chinchilla-614427.hostingersite.com/jellygrace/img/Profile.jpg" alt="User profile image" class="user-avtar">
+                            <span id="userProfileName"></span>
                         </a>
                         <div class="dropdown-menu dropdown-user-profile dropdown-menu-end pc-h-dropdown">
                             <div class="tab-content" id="mysrpTabContent">
@@ -725,6 +720,45 @@ $(document).ready(function() {
   <script>
     font_change("Public-Sans");
   </script>
+
+  
+  <script>
+    (function() {
+        // Unique constants for this instance
+        const PROFILE_WIDGET_API_BASE = 'http://localhost/mobile-ecom/api';
+        const PROFILE_USER_ID = localStorage.getItem('user_id');
+
+        if (!PROFILE_USER_ID) {
+            Swal.fire('Error', 'User not logged in', 'error');
+            // Redirect to login page or handle unauthorized access
+            return;
+        }
+        const profilePreviewEl = document.getElementById('userProfilePreview');
+        const profileNameEl = document.getElementById('userProfileName');
+        async function loadUserProfileWidget() {
+            try {
+                const res = await fetch(`${PROFILE_WIDGET_API_BASE}/admin_get_profile.php?user_id=${PROFILE_USER_ID}`);
+                const data = await res.json();
+                
+                if (data.error) {
+                    return Swal.fire('Error', data.error, 'error');
+                }
+
+                profileNameEl.textContent = data.name;
+                profilePreviewEl.src = data.profile_image ? 
+                    `${PROFILE_WIDGET_API_BASE}/../img/${data.profile_image}` : 'https://orchid-chinchilla-614427.hostingersite.com/jellygrace/img/Profile.jpg';
+            } catch (error) {
+                Swal.fire('Error', 'Failed to load profile', 'error');
+                console.error('Profile widget error:', error);
+            }
+        }
+
+        loadUserProfileWidget();
+    })();
+</script>
+
+
+
 </body>
 
 </html>

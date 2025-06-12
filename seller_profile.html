@@ -49,22 +49,16 @@
     </div>
     <div class="navbar-content">
       <ul class="pc-navbar">
-        <li class="pc-item">
-          <a href="admin_dashboard.html" class="pc-link">
+       <li class="pc-item">
+          <a href="seller_dashboard.html" class="pc-link">
             <span class="pc-micon"><i class="ti ti-dashboard"></i></span>
             <span class="pc-mtext">Dashboard</span>
           </a>
         </li>
-
-        <li class="pc-item pc-caption">
-          <label>Menu</label>
-          <i class="ti ti-dashboard"></i>
-        </li>
-      
         <li class="pc-item">
-          <a href="admin_user_list.html" class="pc-link">
-            <span class="pc-micon"><i class="ti ti-users"></i></span>
-            <span class="pc-mtext">Users</span>
+          <a href="seller_transaction.html" class="pc-link">
+            <span class="pc-micon"><i class="ti ti-history"></i></span>
+            <span class="pc-mtext">Transaction</span>
           </a>
         </li>
 
@@ -73,7 +67,7 @@
           <i class="ti ti-news"></i>
         </li>
         <li class="pc-item">
-          <a href="admin_profile.html" class="pc-link">
+          <a href="seller_profile.html" class="pc-link">
             <span class="pc-micon"><i class="ti ti-user"></i></span>
             <span class="pc-mtext">Profile</span>
           </a>
@@ -106,7 +100,6 @@
 </nav>
 <!-- [ Sidebar Menu ] end --> <!-- [ Header Topbar ] start -->
 
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <header class="pc-header">
   <div class="header-wrapper"> <!-- [Mobile Media Block] start -->
@@ -143,12 +136,7 @@
         </form>
       </div>
     </li>
-    <li class="pc-h-item d-none d-md-inline-flex">
-      <form class="header-search">
-        <i data-feather="search" class="icon-search"></i>
-        <input type="search" class="form-control" placeholder="Search here. . .">
-      </form>
-    </li>
+   
   </ul>
 </div>
 <!-- [Mobile Media Block end] -->
@@ -190,13 +178,13 @@
         data-bs-auto-close="outside"
         aria-expanded="false"
       >
-        <img id="userProfilePreview_<?php echo uniqid(); ?>" src="https://via.placeholder.com/150" alt="User profile image" class="user-avtar">
-        <span id="userProfileName_<?php echo uniqid(); ?>"></span>
+        <img id="userProfilePreview" src="https://orchid-chinchilla-614427.hostingersite.com/jellygrace/img/Profile.jpg" alt="User profile image" class="user-avtar">
+        <span id="userProfileName"></span>
       </a>
       <div class="dropdown-menu dropdown-user-profile dropdown-menu-end pc-h-dropdown">
         <div class="tab-content" id="mysrpTabContent">
           <div class="tab-pane fade show active" id="drp-tab-1" role="tabpanel" aria-labelledby="drp-t1" tabindex="0">
-            <a href="admin_profile.html" class="dropdown-item">
+            <a href="seller_profile.html" class="dropdown-item">
               <i class="ti ti-user"></i>
               <span>View Profile</span>
             </a>
@@ -214,7 +202,6 @@
 </header>
 <!-- [ Header ] end -->
 
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 
   <!-- [ Main Content ] start -->
@@ -227,7 +214,7 @@
 
   <form id="profileForm" enctype="multipart/form-data">
         <div class="mb-3">
-            <img id="profilePreview" src="https://via.placeholder.com/150" class="rounded-circle mb-3" width="120" height="120">
+            <img id="profilePreview" src="https://orchid-chinchilla-614427.hostingersite.com/jellygrace/img/Profile.jpg" class="rounded-circle mb-3" width="120" height="120">
             <input type="file" name="profile_image" id="profile_image" class="form-control">
         </div>
 
@@ -274,7 +261,7 @@
     </div>
   </div>
 </footer>
-  
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <script src="asset/js/plugins/apexcharts.min.js"></script>
   <script src="asset/js/pages/dashboard-default.js"></script>
   <script src="asset/js/plugins/popper.min.js"></script>
@@ -301,7 +288,7 @@
   </script>
 
     <script>
-    const API_BASE = 'https://orchid-chinchilla-614427.hostingersite.com/markrey/api';
+    const API_BASE = 'http://localhost/mobile-ecom/api';
     const userId = localStorage.getItem('user_id');
 
     if (!userId) {
@@ -321,8 +308,10 @@
         document.getElementById('name').value = data.name;
         document.getElementById('email').value = data.email;
         document.getElementById('contact').value = data.contact;
+        document.getElementById('userProfilePreview').src = data.profile_image ? 
+          `${API_BASE}/../img/${data.profile_image}` : 'http://localhost/mobile-ecom/api/img/Profile.jpg';
         document.getElementById('profilePreview').src = data.profile_image ? 
-          `${API_BASE}/../img/${data.profile_image}` : 'https://via.placeholder.com/150';
+          `${API_BASE}/../img/${data.profile_image}` : 'http://localhost/mobile-ecom/api/img/Profile.jpg';
       } catch (error) {
         Swal.fire('Error', 'Failed to load profile', 'error');
         console.error('Error loading profile:', error);
@@ -374,19 +363,16 @@
   <script>
     (function() {
         // Unique constants for this instance
-        const PROFILE_WIDGET_API_BASE = 'https://orchid-chinchilla-614427.hostingersite.com/markrey/api';
+        const PROFILE_WIDGET_API_BASE = 'http://localhost/mobile-ecom/api';
         const PROFILE_USER_ID = localStorage.getItem('user_id');
-        
-        // Get elements with unique IDs
-        const profilePreviewEl = document.getElementById('userProfilePreview_<?php echo uniqid(); ?>');
-        const profileNameEl = document.getElementById('userProfileName_<?php echo uniqid(); ?>');
 
         if (!PROFILE_USER_ID) {
             Swal.fire('Error', 'User not logged in', 'error');
             // Redirect to login page or handle unauthorized access
             return;
         }
-
+        const profilePreviewEl = document.getElementById('userProfilePreview');
+        const profileNameEl = document.getElementById('userProfileName');
         async function loadUserProfileWidget() {
             try {
                 const res = await fetch(`${PROFILE_WIDGET_API_BASE}/admin_get_profile.php?user_id=${PROFILE_USER_ID}`);
@@ -398,7 +384,7 @@
 
                 profileNameEl.textContent = data.name;
                 profilePreviewEl.src = data.profile_image ? 
-                    `${PROFILE_WIDGET_API_BASE}/../img/${data.profile_image}` : 'https://via.placeholder.com/150';
+                    `${PROFILE_WIDGET_API_BASE}/../img/${data.profile_image}` : 'https://orchid-chinchilla-614427.hostingersite.com/jellygrace/img/Profile.jpg';
             } catch (error) {
                 Swal.fire('Error', 'Failed to load profile', 'error');
                 console.error('Profile widget error:', error);

@@ -43,28 +43,24 @@
 <nav class="pc-sidebar">
   <div class="navbar-wrapper">
     <div class="m-header">
-      <a href="" class="b-brand text-primary">
+      <a href="index.html" class="b-brand text-primary">
         <h5>E-commerce</h5>
       </a>
     </div>
     <div class="navbar-content">
       <ul class="pc-navbar">
+
         <li class="pc-item">
-          <a href="admin_dashboard.html" class="pc-link">
+          <a href="customer_dashboard.html" class="pc-link">
             <span class="pc-micon"><i class="ti ti-dashboard"></i></span>
             <span class="pc-mtext">Dashboard</span>
           </a>
         </li>
 
-        <li class="pc-item pc-caption">
-          <label>Menu</label>
-          <i class="ti ti-dashboard"></i>
-        </li>
-      
         <li class="pc-item">
-          <a href="admin_user_list.html" class="pc-link">
-            <span class="pc-micon"><i class="ti ti-users"></i></span>
-            <span class="pc-mtext">Users</span>
+          <a href="index.html" class="pc-link d-flex align-items-center">
+            <span class="pc-micon me-2"><i class="ti ti-shopping-cart fs-5"></i></span>
+            <span class="pc-mtext fw-semibold">Shop</span>
           </a>
         </li>
 
@@ -73,7 +69,7 @@
           <i class="ti ti-news"></i>
         </li>
         <li class="pc-item">
-          <a href="admin_profile.html" class="pc-link">
+          <a href="customer_profile.html" class="pc-link">
             <span class="pc-micon"><i class="ti ti-user"></i></span>
             <span class="pc-mtext">Profile</span>
           </a>
@@ -106,113 +102,127 @@
 </nav>
 <!-- [ Sidebar Menu ] end --> <!-- [ Header Topbar ] start -->
 
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
+<!--header-->
 <header class="pc-header">
   <div class="header-wrapper"> <!-- [Mobile Media Block] start -->
-<div class="me-auto pc-mob-drp">
-  <ul class="list-unstyled">
-    <!-- ======= Menu collapse Icon ===== -->
-    <li class="pc-h-item pc-sidebar-collapse">
-      <a href="#" class="pc-head-link ms-0" id="sidebar-hide">
-        <i class="ti ti-menu-2"></i>
-      </a>
-    </li>
-    <li class="pc-h-item pc-sidebar-popup">
-      <a href="#" class="pc-head-link ms-0" id="mobile-collapse">
-        <i class="ti ti-menu-2"></i>
-      </a>
-    </li>
-    <li class="dropdown pc-h-item d-inline-flex d-md-none">
-      <a
-        class="pc-head-link dropdown-toggle arrow-none m-0"
-        data-bs-toggle="dropdown"
-        href="#"
-        role="button"
-        aria-haspopup="false"
-        aria-expanded="false"
-      >
-        <i class="ti ti-search"></i>
-      </a>
-      <div class="dropdown-menu pc-h-dropdown drp-search">
-        <form class="px-3">
-          <div class="form-group mb-0 d-flex align-items-center">
-            <i data-feather="search"></i>
-            <input type="search" class="form-control border-0 shadow-none" placeholder="Search here. . .">
+    <div class="me-auto pc-mob-drp">
+      <ul class="list-unstyled">
+        <!-- ======= Menu collapse Icon ===== -->
+        <li class="pc-h-item pc-sidebar-collapse">
+          <a href="#" class="pc-head-link ms-0" id="sidebar-hide">
+            <i class="ti ti-menu-2"></i>
+          </a>
+        </li>
+        <li class="pc-h-item pc-sidebar-popup">
+          <a href="#" class="pc-head-link ms-0" id="mobile-collapse">
+            <i class="ti ti-menu-2"></i>
+          </a>
+        </li>
+        <li class="dropdown pc-h-item d-inline-flex d-md-none">
+          <a
+            class="pc-head-link dropdown-toggle arrow-none m-0"
+            data-bs-toggle="dropdown"
+            href="#"
+            role="button"
+            aria-haspopup="false"
+            aria-expanded="false">
+            <i class="ti ti-search"></i>
+          </a>
+          <div class="dropdown-menu pc-h-dropdown drp-search">
+            <form class="px-3">
+              <div class="form-group mb-0 d-flex align-items-center">
+                <i data-feather="search"></i>
+                <input type="search" class="form-control border-0 shadow-none" placeholder="Search here. . .">
+              </div>
+            </form>
           </div>
-        </form>
-      </div>
-    </li>
-    <li class="pc-h-item d-none d-md-inline-flex">
-      <form class="header-search">
-        <i data-feather="search" class="icon-search"></i>
-        <input type="search" class="form-control" placeholder="Search here. . .">
-      </form>
-    </li>
-  </ul>
-</div>
-<!-- [Mobile Media Block end] -->
-<div class="ms-auto">
-  <ul class="list-unstyled">
+        </li>
     
-  <!-- <li class="dropdown pc-h-item">
-          <a class="pc-head-link dropdown-toggle arrow-none me-0" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
-            <i class="ti ti-bell"></i>
-            <span>3</span>
+      </ul>
+    </div>
+    <!-- [Mobile Media Block end] -->
+    <div class="ms-auto">
+      <ul class="list-unstyled">
+
+
+        <li class="dropdown pc-h-item">
+          <a class="nav-link position-relative d-flex align-items-center" href="index.html">
+            <i class="fas fa-shopping-bag fs-5 me-1"></i>
+            <span class="d-none d-sm-inline-block fw-semibold">Shop</span>
+          </a>
+        </li>
+
+        <li class="dropdown pc-h-item">
+          <a class="nav-link position-relative d-flex align-items-center" href="checkout-page.html">
+            <i class="fas fa-shopping-cart fs-5 me-1"></i>
+            <span class="d-none d-sm-inline-block fw-semibold">Cart</span>
+            <span id="cart-badge" class="badge bg-danger  rounded-pill position-absolute top-70 start-95 translate-middle"></span>
+          </a>
+        </li>
+
+
+        <li class="dropdown pc-h-item ">
+          <a class="pc-head-link dropdown-toggle arrow-none position-relative" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+            <i class="ti ti-bell fs-5"></i>
+            <span id="notificationBadge" class="badge bg-danger rounded-pill position-absolute top-70 start-95 translate-middle" >0</span>
           </a>
 
-          <div class="dropdown-menu dropdown-notification dropdown-menu-end pc-h-dropdown">
-            <div class="dropdown-header d-flex align-items-center justify-content-between">
-              <h5 class="m-0">Notifications</h5>
-              <a href="#" class="pc-head-link bg-transparent" onclick="clearNotifications(event)">
-                <i class="ti ti-x text-danger"></i>
+          <div class="dropdown-menu dropdown-menu-end pc-h-dropdown shadow dropdown-notification">
+            <div class="dropdown-header d-flex align-items-center justify-content-between px-3 py-2">
+              <h6 class="mb-0 fw-semibold text-dark">Notifications</h6>
+              <a href="#" class="text-danger" onclick="clearNotifications(event)">
+                <i class="ti ti-x fs-6"></i>
               </a>
             </div>
-            <div class="dropdown-divider"></div>
-            <div class="dropdown-header px-0 text-wrap header-notification-scroll position-relative" style="max-height: calc(100vh - 215px); overflow-y: auto;">
-              <div class="list-group list-group-flush w-100" id="notificationList">
+            <div class="dropdown-divider my-0"></div>
+
+            <div class="px-2 py-1 overflow-auto" style="max-height: calc(100vh - 215px);" id="notificationList">
+            
+            </div>
+
+            <div class="dropdown-divider my-0"></div>
+            <div class="text-center py-2">
+              <a href="#" class="text-primary fw-semibold small">View All</a>
+            </div>
+          </div>
+        </li>
+
+
+        <li class="dropdown pc-h-item header-user-profile">
+          <a
+            class="pc-head-link dropdown-toggle arrow-none me-0"
+            data-bs-toggle="dropdown"
+            href="#"
+            role="button"
+            aria-haspopup="false"
+            data-bs-auto-close="outside"
+            aria-expanded="false">
+
+            <img id="user-avatar" src="img/Profile.jpg" alt="user-image" class="user-avtar">
+            <span id="user-name"></span>
+
+          </a>
+          <div class="dropdown-menu dropdown-user-profile dropdown-menu-end pc-h-dropdown">
+            <div class="tab-content" id="mysrpTabContent">
+              <div class="tab-pane fade show active" id="drp-tab-1" role="tabpanel" aria-labelledby="drp-t1" tabindex="0">
+                <a href="customer_profile.html" class="dropdown-item">
+                  <i class="ti ti-user"></i>
+                  <span>View Profile</span>
+                </a>
+                <a href="#" id="logoutBtn1" class="dropdown-item">
+                  <i class="ti ti-power"></i>
+                  <span>Logout</span>
+                </a>
               </div>
             </div>
-            <div class="dropdown-divider"></div>
-            <div class="text-center py-2">
-              <a href="#" class="link-primary">View all</a>
-            </div>
           </div>
-        </li> -->
-    
-    <li class="dropdown pc-h-item header-user-profile">
-      <a
-        class="pc-head-link dropdown-toggle arrow-none me-0"
-        data-bs-toggle="dropdown"
-        href="#"
-        role="button"
-        aria-haspopup="false"
-        data-bs-auto-close="outside"
-        aria-expanded="false"
-      >
-        <img id="userProfilePreview_<?php echo uniqid(); ?>" src="https://via.placeholder.com/150" alt="User profile image" class="user-avtar">
-        <span id="userProfileName_<?php echo uniqid(); ?>"></span>
-      </a>
-      <div class="dropdown-menu dropdown-user-profile dropdown-menu-end pc-h-dropdown">
-        <div class="tab-content" id="mysrpTabContent">
-          <div class="tab-pane fade show active" id="drp-tab-1" role="tabpanel" aria-labelledby="drp-t1" tabindex="0">
-            <a href="admin_profile.html" class="dropdown-item">
-              <i class="ti ti-user"></i>
-              <span>View Profile</span>
-            </a>
-            <a href="#" id="logoutBtn1" class="dropdown-item">
-              <i class="ti ti-power"></i>
-              <span>Logout</span>
-            </a>
-          </div>
-        </div>
-      </div>
-    </li>
-  </ul>
-</div>
- </div>
+        </li>
+      </ul>
+    </div>
+  </div>
 </header>
 <!-- [ Header ] end -->
+
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
@@ -370,44 +380,6 @@
 
     loadProfile();
   </script>
-
-  <script>
-    (function() {
-        // Unique constants for this instance
-        const PROFILE_WIDGET_API_BASE = 'http://localhost/mobile-ecom/api';
-        const PROFILE_USER_ID = localStorage.getItem('user_id');
-        
-        // Get elements with unique IDs
-        const profilePreviewEl = document.getElementById('userProfilePreview_<?php echo uniqid(); ?>');
-        const profileNameEl = document.getElementById('userProfileName_<?php echo uniqid(); ?>');
-
-        if (!PROFILE_USER_ID) {
-            Swal.fire('Error', 'User not logged in', 'error');
-            // Redirect to login page or handle unauthorized access
-            return;
-        }
-
-        async function loadUserProfileWidget() {
-            try {
-                const res = await fetch(`${PROFILE_WIDGET_API_BASE}/admin_get_profile.php?user_id=${PROFILE_USER_ID}`);
-                const data = await res.json();
-                
-                if (data.error) {
-                    return Swal.fire('Error', data.error, 'error');
-                }
-
-                profileNameEl.textContent = data.name;
-                profilePreviewEl.src = data.profile_image ? 
-                    `${PROFILE_WIDGET_API_BASE}/../img/${data.profile_image}` : 'https://via.placeholder.com/150';
-            } catch (error) {
-                Swal.fire('Error', 'Failed to load profile', 'error');
-                console.error('Profile widget error:', error);
-            }
-        }
-
-        loadUserProfileWidget();
-    })();
-</script>
 
 <script>
   document.getElementById('logoutBtn1').addEventListener('click', function(e) {

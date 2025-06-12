@@ -1,6 +1,6 @@
 <?php
-session_start();
-include("api/conn.php");
+header("Content-Type: application/json");
+include("conn.php");
 
 // Access control
 if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'seller') {

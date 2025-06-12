@@ -1,78 +1,82 @@
 <?php
-session_start();
-include 'conn.php';
+header("Content-Type: application/json");
+include("conn.php");
 
+// Retrieve input
+$input = json_decode(file_get_contents('php://input'), true);
+//$user_id = 8; // Fetch user ID from JSON input
+$user_id = $input['userId'] ?? null; // Fetch user ID from JSON input
+$search = $input['search'] ?? ''; // Fetch search term from JSON input
+$price = $input['price'] ?? ''; // Fetch price filter from JSON input
+$page = $input['page'] ?? 1; // Fetch current page from JSON input
+$limit = 12; // Set number of items per page
+$offset = ($page - 1) * $limit; // Calculate offset for pagination
 
-// Get search and price filter
-$search = $_POST['search'] ?? '';
-$price = $_POST['price'] ?? '';
-$user_id = $_POST['user_id'];
-$page = $_POST['page'] ?? 1;
-$limit = 12;
-$offset = ($page - 1) * $limit;
+$response = [
+    'success' => false,
+    'products' => [],
+    'pagination' => [
+        'currentPage' => $page,
+        'totalPages' => 0,
+        'totalProducts' => 0
+    ],
+    'message' => ''
+];
 
-$sql = "SELECT * FROM products WHERE prod_user_id = $user_id";
+if ($user_id) {
+    $sql = "SELECT * FROM products WHERE prod_user_id = ?";
+    $params = [$user_id];
 
-if (!empty($search)) {
-    $search = $conn->real_escape_string($search);
-    $sql .= " AND (prod_name LIKE '%$search%' OR prod_description LIKE '%$search%')";
-}
-
-if (!empty($price)) {
-    [$min, $max] = explode('-', $price);
-    $sql .= " AND prod_price BETWEEN $min AND $max";
-}
-
-// Count total for pagination
-$countSql = str_replace("SELECT *", "SELECT COUNT(*) as total", $sql);
-$countResult = $conn->query($countSql);
-$totalProducts = $countResult->fetch_assoc()['total'];
-$totalPages = ceil($totalProducts / $limit);
-
-// Add pagination limit
-$sql .= " LIMIT $limit OFFSET $offset";
-
-$result = $conn->query($sql);
-
-if ($result->num_rows > 0) {
-    echo '<div class="row">';
-    while ($row = $result->fetch_assoc()) {
-        $modalId = "productModal" . $row['prod_id'];
-        echo '
-        <div class="col-lg-3 col-md-6 mb-4 d-flex">
-            <div class="card h-100 w-100" data-bs-toggle="modal" data-bs-target="#' . $modalId . '" style="cursor:pointer;">
-                <div class="view overlay">
-                    <img src="' . $row['prod_picture'] . '" class="card-img-top" alt="">
-                </div>
-                <div class="card-body text-center">
-                    <h5>' . $row['prod_stock'] . ' in stock</h5>
-                    <h5><strong>' . $row['prod_name'] . '</strong></h5>
-                    <p>' . $row['prod_description'] . '</p>
-                    <p>₱ ' . $row['prod_price'] . '</p>
-                </div>
-            </div>
-        </div>';
+    // Search filter
+    if (!empty($search)) {
+        $search = "%{$conn->real_escape_string($search)}%";
+        $sql .= " AND (prod_name LIKE ? OR prod_description LIKE ?)";
+        $params[] = $search;
+        $params[] = $search;
     }
-    echo '</div>';
 
-    // Pagination UI
-    echo '<nav class="d-flex justify-content-center mt-4  wow fadeIn"><ul class="pagination pg-blue"><li class="page-item disabled">
-                        <a class="page-link" href="#" aria-label="Previous">
-                            <span aria-hidden="true">&laquo;</span>
-                            <span class="sr-only">Previous</span>
-                        </a>
-                    </li>';
-    for ($i = 1; $i <= $totalPages; $i++) {
-        $active = ($i == $page) ? 'active' : '';
-        echo '<li class="page-item ' . $active . '"><a class="page-link pagination-link" href="#" data-page="' . $i . '">' . $i . '</a></li>';
+    // Price filter
+    if (!empty($price)) {
+        [$min, $max] = explode('-', $price);
+        $sql .= " AND prod_price BETWEEN ? AND ?";
+        $params[] = $min;
+        $params[] = $max;
     }
-    echo '<li class="page-item">
-                        <a class="page-link" href="#" aria-label="Next">
-                            <span aria-hidden="true">&raquo;</span>
-                            <span class="sr-only">Next</span>
-                        </a>
-                    </li></ul></nav>';
+
+    // Count total products for pagination
+    $countSql = str_replace("SELECT *", "SELECT COUNT(*) as total", $sql);
+    $stmtCount = $conn->prepare($countSql);
+    $stmtCount->bind_param(str_repeat('s', count($params)), ...$params);
+    $stmtCount->execute();
+    $countResult = $stmtCount->get_result();
+    $totalProducts = $countResult->fetch_assoc()['total'];
+    $response['pagination']['totalProducts'] = $totalProducts;
+    $response['pagination']['totalPages'] = ceil($totalProducts / $limit);
+
+    // Add pagination limit
+    $sql .= " LIMIT ? OFFSET ?";
+    $params[] = $limit;
+    $params[] = $offset;
+
+    // Fetch products
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param(str_repeat('s', count($params)), ...$params);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    if ($result->num_rows > 0) {
+        while ($row = $result->fetch_assoc()) {
+            // Format product data
+            $row['prod_picture'] = $row['prod_picture'] ?? ''; // Ensure picture is set
+            $response['products'][] = $row;
+        }
+        $response['success'] = true;
+    } else {
+        $response['message'] = 'No products found.';
+    }
 } else {
-    echo '<p class="text-center">No products found.</p>';
+    $response['message'] = 'Invalid user ID.';
 }
+
+echo json_encode($response); // Return JSON response
 $conn->close();

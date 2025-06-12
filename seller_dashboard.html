@@ -47,7 +47,113 @@
     <!-- [ Pre-loader ] End -->
 
     <?php include("seller_slidebar.php") ?>
-    <?php include("seller_header.php") ?>
+    <!-- [ Header Topbar ] start -->
+
+  <header class="pc-header">
+  <div class="header-wrapper"> <!-- [Mobile Media Block] start -->
+    <div class="me-auto pc-mob-drp">
+      <ul class="list-unstyled">
+        <!-- ======= Menu collapse Icon ===== -->
+        <li class="pc-h-item pc-sidebar-collapse">
+          <a href="#" class="pc-head-link ms-0" id="sidebar-hide">
+            <i class="ti ti-menu-2"></i>
+          </a>
+        </li>
+        <li class="pc-h-item pc-sidebar-popup">
+          <a href="#" class="pc-head-link ms-0" id="mobile-collapse">
+            <i class="ti ti-menu-2"></i>
+          </a>
+        </li>
+        <li class="dropdown pc-h-item d-inline-flex d-md-none">
+          <a
+            class="pc-head-link dropdown-toggle arrow-none m-0"
+            data-bs-toggle="dropdown"
+            href="#"
+            role="button"
+            aria-haspopup="false"
+            aria-expanded="false">
+            <i class="ti ti-search"></i>
+          </a>
+          <div class="dropdown-menu pc-h-dropdown drp-search">
+            <form class="px-3">
+              <div class="form-group mb-0 d-flex align-items-center">
+                <i data-feather="search"></i>
+                <input type="search" class="form-control border-0 shadow-none" placeholder="Search here. . .">
+              </div>
+            </form>
+          </div>
+        </li>
+        <li class="pc-h-item d-none d-md-inline-flex">
+          <form class="header-search">
+            <i data-feather="search" class="icon-search"></i>
+            <input type="search" class="form-control" placeholder="Search here. . .">
+          </form>
+        </li>
+      </ul>
+    </div>
+    <!-- [Mobile Media Block end] -->
+    <div class="ms-auto">
+      <ul class="list-unstyled">
+
+        <li class="dropdown pc-h-item">
+          <a class="pc-head-link dropdown-toggle arrow-none position-relative" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+            <i class="ti ti-bell fs-5"></i>
+            <span id="notificationBadge" class="badge bg-danger rounded-pill position-absolute top-70 start-95 translate-middle"  >0</span>
+          </a>
+
+          <div class="dropdown-menu dropdown-menu-end pc-h-dropdown shadow dropdown-notification">
+            <div class="dropdown-header d-flex align-items-center justify-content-between px-3 py-2">
+              <h6 class="mb-0 fw-semibold text-dark">Notifications</h6>
+              <a href="#" class="text-danger" onclick="clearNotifications(event)">
+                <i class="ti ti-x fs-6"></i>
+              </a>
+            </div>
+            <div class="dropdown-divider my-0"></div>
+
+            <div class="px-2 py-1 overflow-auto" style="max-height: calc(100vh - 215px);" id="notificationList">
+            
+            </div>
+
+            <div class="dropdown-divider my-0"></div>
+            <div class="text-center py-2">
+              <a href="#" class="text-primary fw-semibold small">View All</a>
+            </div>
+          </div>
+        </li>
+
+
+        <li class="dropdown pc-h-item header-user-profile">
+          <a
+            class="pc-head-link dropdown-toggle arrow-none me-0"
+            data-bs-toggle="dropdown"
+            href="#"
+            role="button"
+            aria-haspopup="false"
+            data-bs-auto-close="outside"
+            aria-expanded="false">
+            <img src="" alt="user-image" class="user-avtar">
+            <span></span>
+          </a>
+          <div class="dropdown-menu dropdown-user-profile dropdown-menu-end pc-h-dropdown">
+            <div class="tab-content" id="mysrpTabContent">
+              <div class="tab-pane fade show active" id="drp-tab-1" role="tabpanel" aria-labelledby="drp-t1" tabindex="0">
+                <a href="seller_profile.html" class="dropdown-item">
+                  <i class="ti ti-user"></i>
+                  <span>View Profile</span>
+                </a>
+                <a href="#" id="logoutBtn1" class="dropdown-item">
+                  <i class="ti ti-power"></i>
+                  <span>Logout</span>
+                </a>
+              </div>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+</header>
+<!-- [ Header ] end -->
 
     <!-- [ Main Content ] start -->
     <div class="pc-container">
@@ -135,9 +241,199 @@
             </div>
         </div>
     </div>
-
+     <script type="text/javascript" src="js/jquery-3.4.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <!-- JQuery -->
-    <script type="text/javascript" src="js/jquery-3.4.1.min.js"></script>
+   
+    <script>
+  document.getElementById('logoutBtn').addEventListener('click', function(e) {
+    e.preventDefault();
+    Swal.fire({
+      title: 'Are you sure?',
+      text: "You will be logged out!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#6c757d',
+      confirmButtonText: 'Yes, logout',
+      background: '#ffffff',
+      color: '#000000'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        localStorage.removeItem('user_id');
+        window.location.href = 'login_page.html'; // Your actual logout script
+      }
+    });
+  });
+  document.getElementById('logoutBtn1').addEventListener('click', function(e) {
+    e.preventDefault();
+    Swal.fire({
+      title: 'Are you sure?',
+      text: "You will be logged out!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#6c757d',
+      confirmButtonText: 'Yes, logout',
+      background: '#ffffff',
+      color: '#000000'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        localStorage.removeItem('user_id');
+        window.location.href = 'login_page.html'; // Your actual logout script
+      }
+    });
+  });
+</script>
+ <script>
+    function loadNotifications(all = false) {
+      const userId = localStorage.getItem('user_id');
+      updateCartBadge()
+      const url = all ?
+        `api/fetch_notification.php?all=1&user_id=${userId}` :
+        `api/fetch_notification.php?&user_id=${userId}`;
+
+      fetch(url)
+      
+        .then(res => res.json())
+        .then(data => {
+          alert(data.unread_count);
+          const badge = document.getElementById("notificationBadge");
+          const dd = document.getElementById("notificationList");
+
+          // 1) Update badge with unread_count
+          badge.textContent = data.unread_count;
+          // 2) Build dropdown list of all notifications
+          dd.innerHTML = '';
+          if (data.notifications.length === 0) {
+            dd.innerHTML = '<li><a class="dropdown-item text-muted" href="#">No notifications</a></li>';
+            return;
+          }
+
+          data.notifications.forEach(n => {
+            const readClass = n.status === 'unread' ? 'fw-bold' : '';
+            const li = document.createElement('li');
+            li.innerHTML = `
+          <a class="dropdown-item ${readClass}"
+             href="#"
+             onclick="handleNotificationClick(${n.id}, ${n.addcart_id})">
+            ${n.message}
+          </a><span style="font-size: 9px; display: inline-block; text-align: right; width: 100%; margin-right: 5px;">${n.created_at}</span>`;
+            dd.appendChild(li);
+          });
+
+          // 3) “See more” if we hit the 10‑item limit
+          if (data.notifications.length > 10 && !all) {
+            const more = document.createElement('li');
+            more.innerHTML = `
+          <a class="dropdown-item text-primary fw-bold"
+             href="#"
+             onclick="loadNotifications(true)">
+            See more
+          </a>`;
+            dd.appendChild(more);
+          }
+        });
+    } 
+        function updateCartBadge() {
+            const cart = JSON.parse(localStorage.getItem('cart')) || {};
+            let totalItems = 0;
+            for (let id in cart) {
+                totalItems += cart[id];
+            }
+            const badge = document.getElementById('cart-badge');
+            if (badge) {
+                badge.textContent = totalItems > 0 ? totalItems : '';
+            }
+        }
+        updateCartBadge()
+    // Example of your existing click‑handler
+    function handleNotificationClick(notifId, orderId) {
+      const userId = localStorage.getItem('user_id');
+      fetch(`api/mark_notification_read.php?user_id=${userId}&notifId=${notifId}`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            id: notifId
+          })
+        })
+        .then(r => r.json())
+        .then(resp => {
+          if (resp.success) {
+            document.getElementById("searchInput").value = orderId;
+            searchTable();
+            loadNotifications(); // refresh both badge & list
+          } else {
+            alert("Failed to mark as read");
+          }
+        });
+    }
+    var lastNotificationTime = 0;
+
+    function getNotification() {
+      
+      // Check if the browser supports notifications
+      if (!("Notification" in window)) {
+        $('body').append('<h4 style="color:red">*Browser does not support Web Notification</h4>');
+        return;
+      }
+
+      // If permission is not granted, request it
+      if (Notification.permission !== "granted") {
+        Notification.requestPermission();
+      } else {
+        // Get the current time
+        var currentTime = Date.now();
+        const userId = localStorage.getItem('user_id');
+        // Check if 2 minutes have passed since the last notification
+        if (currentTime - lastNotificationTime >= 120000) { // 120000 ms = 2 minutes
+          $.ajax({
+            url: "api/fetch_notification.php",
+            type: "POST",
+            contentType: "application/json",
+            data: JSON.stringify({ user_id: userId }),
+            success: function(response) {
+              if (response.result === true) {
+                var notificationDetails = response.notifications;
+                for (var i = notificationDetails.length - 1; i >= 0; i--) {
+                  var notificationUrl = notificationDetails[i]['url'];
+                  var notificationObj = new Notification(notificationDetails[i]['prod_name'], {
+                    body: notificationDetails[i]['message'],
+                  });
+
+                  // Set up notification click behavior
+                  notificationObj.onclick = function() {
+                    window.open(notificationUrl);
+                    notificationObj.close();
+                  };
+
+                  // Close the notification after 5 seconds
+                  setTimeout(function() {
+                    notificationObj.close();
+                  }, 5000);
+
+                  // Update the last notification time
+                  lastNotificationTime = currentTime;
+                  break; // Stop once we have sent one notification
+                }
+              }
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+              console.error("Error fetching notifications", textStatus, errorThrown);
+            }
+          });
+        }
+      }
+    }
+    getNotification();
+    setInterval(function() {
+      getNotification();
+    }, 20000);
+    // Call the notification function every 2 minutes
+    document.addEventListener("DOMContentLoaded", () => loadNotifications());
+  </script>
     <script>
         $(document).ready(function() {
             loadProducts();
@@ -269,6 +565,7 @@
                 });
             }
         });
+
     </script>
 
     <?php include("seller_footer.php") ?>

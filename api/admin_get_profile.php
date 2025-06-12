@@ -1,9 +1,6 @@
 <?php
-// get_profile.php
 header('Content-Type: application/json');
-
 header('Access-Control-Allow-Origin: *'); // Or replace * with your frontend domain
-header('Content-Type: application/json');
 include("conn.php");
 
 $user_id = isset($_GET['user_id']) ? intval($_GET['user_id']) : 0;
@@ -26,4 +23,3 @@ if ($data) {
 } else {
     echo json_encode(['error' => 'User not found']);
 }
-?>

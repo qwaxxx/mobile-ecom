@@ -38,8 +38,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     // ✅ Check for duplicate
-    $stmt = $conn->prepare("SELECT id FROM users WHERE email = ? OR name = ?");
-    $stmt->bind_param("ss", $email, $name);
+    $stmt = $conn->prepare("SELECT id FROM users WHERE email = ? ");
+    $stmt->bind_param("s", $email);
     $stmt->execute();
     if ($stmt->get_result()->num_rows > 0) {
         echo json_encode(['status' => 'error', 'message' => 'User already exists.']);

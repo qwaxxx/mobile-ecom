@@ -1,7 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <title>Dashboard</title>
+  <!-- [Meta] -->
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -9,6 +11,7 @@
   <meta name="keywords" content="Mantis, Dashboard UI Kit, Bootstrap 5, Admin Template, Admin Dashboard, CRM, CMS, Bootstrap Admin Template">
   <meta name="author" content="CodedThemes">
 
+  <!-- [Favicon] icon -->
   <link rel="icon" href="asset/images/favicon.svg" type="image/x-icon">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700&display=swap" id="main-font-link">
   <link rel="stylesheet" href="asset/fonts/tabler-icons.min.css">
@@ -27,12 +30,13 @@
       <div class="loader-fill"></div>
     </div>
   </div>
+  <!-- [ Pre-loader ] End -->
 
 <!-- [ Sidebar Menu ] start -->
 <nav class="pc-sidebar">
   <div class="navbar-wrapper">
     <div class="m-header">
-      <a href="index.html" class="b-brand text-primary">
+      <a href="" class="b-brand text-primary">
         <h5>E-commerce</h5>
       </a>
     </div>
@@ -40,16 +44,15 @@
       <ul class="pc-navbar">
 
         <li class="pc-item">
-          <a href="customer_dashboard.html" class="pc-link">
+          <a href="seller_dashboard.php" class="pc-link">
             <span class="pc-micon"><i class="ti ti-dashboard"></i></span>
             <span class="pc-mtext">Dashboard</span>
           </a>
         </li>
-
         <li class="pc-item">
-          <a href="index.html" class="pc-link d-flex align-items-center">
-            <span class="pc-micon me-2"><i class="ti ti-shopping-cart fs-5"></i></span>
-            <span class="pc-mtext fw-semibold">Shop</span>
+          <a href="seller_transaction.php" class="pc-link">
+            <span class="pc-micon"><i class="ti ti-history"></i></span>
+            <span class="pc-mtext">Transaction</span>
           </a>
         </li>
 
@@ -58,7 +61,7 @@
           <i class="ti ti-news"></i>
         </li>
         <li class="pc-item">
-          <a href="customer_profile.html" class="pc-link">
+          <a href="seller_profile.php" class="pc-link">
             <span class="pc-micon"><i class="ti ti-user"></i></span>
             <span class="pc-mtext">Profile</span>
           </a>
@@ -91,8 +94,7 @@
 </nav>
 <!-- [ Sidebar Menu ] end --> <!-- [ Header Topbar ] start -->
 
-<!--header-->
-<header class="pc-header">
+  <header class="pc-header">
   <div class="header-wrapper"> <!-- [Mobile Media Block] start -->
     <div class="me-auto pc-mob-drp">
       <ul class="list-unstyled">
@@ -138,27 +140,10 @@
     <div class="ms-auto">
       <ul class="list-unstyled">
 
-
         <li class="dropdown pc-h-item">
-          <a class="nav-link position-relative d-flex align-items-center" href="index.html">
-            <i class="fas fa-shopping-bag fs-5 me-1"></i>
-            <span class="d-none d-sm-inline-block fw-semibold">Shop</span>
-          </a>
-        </li>
-
-        <li class="dropdown pc-h-item">
-          <a class="nav-link position-relative d-flex align-items-center" href="checkout-page.html">
-            <i class="fas fa-shopping-cart fs-5 me-1"></i>
-            <span class="d-none d-sm-inline-block fw-semibold">Cart</span>
-            <span id="cart-badge" class="badge bg-danger  rounded-pill position-absolute top-70 start-95 translate-middle"></span>
-          </a>
-        </li>
-
-
-        <li class="dropdown pc-h-item ">
           <a class="pc-head-link dropdown-toggle arrow-none position-relative" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
             <i class="ti ti-bell fs-5"></i>
-            <span id="notificationBadge" class="badge bg-danger rounded-pill position-absolute top-70 start-95 translate-middle" >0</span>
+            <span id="notificationBadge" class="badge bg-danger rounded-pill position-absolute top-70 start-95 translate-middle"  >0</span>
           </a>
 
           <div class="dropdown-menu dropdown-menu-end pc-h-dropdown shadow dropdown-notification">
@@ -191,13 +176,13 @@
             aria-haspopup="false"
             data-bs-auto-close="outside"
             aria-expanded="false">
-            <img id="user-avatar" src="img/Profile.jpg" alt="user-image" class="user-avtar">
-            <span id="user-name">Guest</span>
+            <img src="" alt="user-image" class="user-avtar">
+            <span></span>
           </a>
           <div class="dropdown-menu dropdown-user-profile dropdown-menu-end pc-h-dropdown">
             <div class="tab-content" id="mysrpTabContent">
               <div class="tab-pane fade show active" id="drp-tab-1" role="tabpanel" aria-labelledby="drp-t1" tabindex="0">
-                <a href="customer_profile.html" class="dropdown-item">
+                <a href="seller_profile.html" class="dropdown-item">
                   <i class="ti ti-user"></i>
                   <span>View Profile</span>
                 </a>
@@ -215,65 +200,67 @@
 </header>
 <!-- [ Header ] end -->
 
-<!--header end-->
-
-  <!-- [ Pre-loader ] End -->
-
-
-
+  <!-- [ Main Content ] start -->
   <div class="pc-container">
     <div class="pc-content">
+
+      <!-- [ Main Content ] start -->
       <div class="row">
-        <!-- [ sample-page ] end -->
 
         <div class="col-12">
           <div class="card">
             <div class="card-body p-0">
 
-              <div class="d-flex justify-content-end p-3">
-                <input type="text" id="searchInput" class="form-control form-control-sm w-auto" placeholder="Search orders..." onkeyup="searchTable()" />
-              </div>
-              <div class="table-responsive table-responsive-md">
-
-                <table id="ordersTable" class="table table-striped mb-0">
-                  <thead>
-                    <tr style="cursor: pointer;">
-                      <th onclick="sortTable(0)">Date/Time <span class="sort-indicator"></span></th>
-                      <th onclick="sortTable(1)">Tracking ID <span class="sort-indicator"></span></th>
-                      <th onclick="sortTable(2)">Block/Lot/Street/Village <span class="sort-indicator"></span></th>
-                      <th onclick="sortTable(3)">Baranggay <span class="sort-indicator"></span></th>
-                      <th onclick="sortTable(4)">City <span class="sort-indicator"></span></th>
-                      <th onclick="sortTable(5)">Province <span class="sort-indicator"></span></th>
-                      <th onclick="sortTable(6)">Country <span class="sort-indicator"></span></th>
-                      <th onclick="sortTable(7)">Parcel Quantity <span class="sort-indicator"></span></th>
-                      <th onclick="sortTable(8)">Total Amount <span class="sort-indicator"></span></th>
-                      <th onclick="sortTable(9)">Status <span class="sort-indicator"></span></th>
-                      <th onclick="sortTable(10)">Receipt <span class="sort-indicator"></span></th>
-                    </tr>
-                  </thead>
-                  <tbody id="ordersBody">
-                  </tbody>
-                </table>
-
+              <div class="container">
+                <!-- Orders Table Section -->
+                <div class="row justify-content-center mt-4">
+                  <!-- Search bar aligned to the right -->
+                  <div class="row mb-3">
+                    <div class="col-12 text-end pe-4 pt-3">
+                      <input type="text" id="searchInput" class="form-control form-control-sm w-auto d-inline-block" placeholder="Search orders..." onkeyup="searchTable()" />
+                    </div>
+                  </div>
+                  <!-- Table -->
+                  <div class="table-responsive table-responsive-md">
+                    <table id="ordersTable" class="table table-striped mb-0">
+                      <thead>
+                        <tr style="cursor: pointer;">
+                          <th onclick="sortTable(0)">Date/Time <span class="sort-indicator"></span></th>
+                          <th onclick="sortTable(1)">Tracking ID<span class="sort-indicator"></span></th>
+                          <th onclick="sortTable(2)">Customer Name<span class="sort-indicator"></span></th>
+                          <th onclick="sortTable(3)">Block/Lot/Street/Village <span class="sort-indicator"></span></th>
+                          <th onclick="sortTable(4)">Baranggay <span class="sort-indicator"></span></th>
+                          <th onclick="sortTable(5)">City <span class="sort-indicator"></span></th>
+                          <th onclick="sortTable(6)">Province <span class="sort-indicator"></span></th>
+                          <th onclick="sortTable(7)">Country <span class="sort-indicator"></span></th>
+                          <th onclick="sortTable(8)">Parcel Quantity <span class="sort-indicator"></span></th>
+                          <th onclick="sortTable(9)">Total Amount <span class="sort-indicator"></span></th>
+                          <th onclick="sortTable(10)">Status <span class="sort-indicator"></span></th>
+                          <th onclick="sortTable(11)">Receipt <span class="sort-indicator"></span></th>
+                          <th>Action</th>
+                        </tr>
+                      </thead>
+                      <tbody id="ordersBody">
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
               </div>
             </div>
-            <div class="d-flex justify-content-center mt-3">
-              <nav>
 
-                <ul class="pagination" id="pagination"></ul>
-              </nav>
-            </div>
           </div>
-
         </div>
-
       </div>
     </div>
+    <!-- Pagination -->
+    <div class="d-flex justify-content-center mt-3">
+      <nav>
+        <ul class="pagination" id="pagination"></ul>
+      </nav>
+    </div>
   </div>
- 
 
-  <!-- [ Main Content ] end -->
-   <div id="receiptContent" style="display:none; padding:20px; font-family:Arial, sans-serif;">
+  <div id="receiptContent" style="display:none; padding:20px; font-family:Arial, sans-serif;">
     <h4 style="text-align:center;">Order Receipt</h4>
     <hr>
     <table style="width:100%; border-collapse:collapse;" border="1">
@@ -291,23 +278,10 @@
       <tbody id="receiptTableBody"></tbody>
     </table>
     <p style="margin-top:20px; font-size:12px; text-align:center;">Thank you for your order!</p>
-    
   </div>
-  <footer class="pc-footer">
-  <div class="footer-wrapper container-fluid">
-    <div class="row">
-      <div class="col-sm my-1">
-        <p class="m-0"> Copyright 2025</p>
-      </div>
-      <div class="col-auto my-1">
-        <ul class="list-inline footer-link mb-0">
-          <li class="list-inline-item"><a href="">E-commerce</a></li>
-        </ul>
-      </div>
-    </div>
-  </div>
-</footer>
-  <script type="text/javascript" src="js/jquery-3.4.1.min.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -328,7 +302,6 @@
     }).then((result) => {
       if (result.isConfirmed) {
         localStorage.removeItem('user_id');
-        localStorage.clear();
         window.location.href = 'login_page.html'; // Your actual logout script
       }
     });
@@ -348,12 +321,72 @@
     }).then((result) => {
       if (result.isConfirmed) {
         localStorage.removeItem('user_id');
-        localStorage.clear();
         window.location.href = 'login_page.html'; // Your actual logout script
       }
     });
   });
 </script>
+  <script>
+    async function downloadReceipt() {
+      const receiptTable = document.getElementById('receiptTableBody');
+      receiptTable.innerHTML = '';
+
+      const start = (currentPage - 1) * rowsPerPage;
+      const end = start + rowsPerPage;
+      const paginatedItems = ordersData.slice(start, end);
+
+      paginatedItems.forEach(row => {
+        const address = `${row.billing_street_village_purok}, ${row.billing_baranggay}, ${row.billing_city}, ${row.billing_province}, ${row.billing_country}`;
+        const amount = parseFloat(row.total_amount).toLocaleString(undefined, {
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2
+        });
+
+        receiptTable.innerHTML += `
+          <tr>
+            <td style="padding:5px;">${row.order_date}</td>
+            <td style="padding:5px;">${row.addcart_id}</td>
+            <td style="padding:5px;">${row.billing_lname}, ${row.billing_fname}</td>
+            <td style="padding:5px;">${address}</td>
+            <td style="padding:5px;">${row.total_quantity}</td>
+            <td style="padding:5px;">₱${amount}</td>
+            <td style="padding:5px;">${row.addcart_status}</td>
+          </tr>`;
+      });
+
+      const element = document.getElementById("receiptContent");
+      const canvas = await html2canvas(element, { scale: 2 });
+      const imageData = canvas.toDataURL("image/png");
+      const pdf = new jspdf.jsPDF("p", "mm", "a4");
+      const imgProps = pdf.getImageProperties(imageData);
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+      const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+
+      pdf.addImage(imageData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+      pdf.save("Order-Receipt.pdf");
+    }
+
+  </script>
+
+
+  <!-- [ Main Content ] end -->
+
+  <!-- JQuery -->
+  <script type="text/javascript" src="js/jquery-3.4.1.min.js"></script>
+<footer class="pc-footer">
+  <div class="footer-wrapper container-fluid">
+    <div class="row">
+      <div class="col-sm my-1">
+        <p class="m-0"> Copyright 2025</p>
+      </div>
+      <div class="col-auto my-1">
+        <ul class="list-inline footer-link mb-0">
+          <li class="list-inline-item"><a href="">E-commerce</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</footer>
   <script>
     let currentSortedColumn = -1;
     let currentSortDirection = "asc";
@@ -437,85 +470,81 @@
 
 
   <script>
-  let ordersData = [];
-  const rowsPerPage = 12;
-  let currentPage = 1;
-
-  const userId = localStorage.getItem('user_id');
-
-  // Fetch data from server via POST
-  fetch('api/customer_fetch_orders.php', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({ user_id: userId })
-  })
-  .then(response => response.json())
-  .then(data => {
-    console.log(data);
-    ordersData = data;
-    displayTable(currentPage);
-    setupPagination();
-  })
-  .catch(error => {
-    console.error("Error fetching orders:", error);
-  });
-
-
-
-  if (userId) {
-    fetch(`api/fetch_user.php?user_id=${userId}`)
-      .then(response => response.json())
+    let ordersData = [];
+    const rowsPerPage = 12;
+    let currentPage = 1;
+    const userId = localStorage.getItem('user_id');
+    // Fetch data from server
+    fetch(`api/seller_fetch_orders.php?user_id=${userId}`)
+      .then(res => res.json())
       .then(data => {
-        if (data.success) {
-          document.getElementById("user-name").textContent = data.name;
-        } else {
-          console.error("Error:", data.error);
-        }
-      })
-      .catch(error => {
-        console.error("Fetch error:", error);
+        ordersData = data;  
+        displayTable(currentPage);
+        setupPagination();
       });
-  }
 
-// Display paginated table
-  function displayTable(page) {
-    const tbody = document.getElementById('ordersBody');
-    tbody.innerHTML = '';
+    // Display paginated table
+    function displayTable(page) {
+      const tbody = document.getElementById('ordersBody');
+      tbody.innerHTML = '';
 
-    const start = (page - 1) * rowsPerPage;
-    const end = start + rowsPerPage;
-    const paginatedItems = ordersData.slice(start, end);
+      const start = (page - 1) * rowsPerPage;
+      const end = start + rowsPerPage;
+      const paginatedItems = ordersData.slice(start, end);
 
-    if (paginatedItems.length === 0) {
-      tbody.innerHTML = `<tr><td colspan="10" class="text-center text-muted py-4">No transactions found.</td></tr>`;
-    } else {
+      if (paginatedItems.length === 0) {
+        tbody.innerHTML = `<tr>
+      <td colspan="12" class="text-center text-muted py-4">
+        No transactions found.
+      </td>
+    </tr>`;
+        return;
+      }
+
       paginatedItems.forEach(row => {
+        // only show actions when status is exactly "pending"
+        const actionCell = row.addcart_status.toLowerCase() === 'pending' ?
+          `
+        <button class="btn btn-success btn-sm"
+                onclick="updateStatus(${row.order_id}, 'accepted')">
+          Accept
+        </button>
+        <button class="btn btn-danger btn-sm"
+                onclick="updateStatus(${row.order_id}, 'rejected')">
+          Reject
+        </button>` :
+          'No actions needed'; // empty if not pending
+
         tbody.innerHTML += `
-          <tr>
-            <td>${row.order_date}</td>
-            <td>${row.addcart_id}</td>
-            <td>${row.billing_street_village_purok}</td>
-            <td>${row.billing_baranggay}</td>
-            <td>${row.billing_city}</td>
-            <td>${row.billing_province}</td>
-            <td>${row.billing_country}</td>
-            <td>${row.total_quantity}</td>
-            <td>${row.total_amount}</td>
-            <td>${row.addcart_status}</td>
-            <td>
-      <button class="btn btn-primary btn-sm"
-              onclick='downloadReceipt(${JSON.stringify(row)})'>
-        Download
-      </button>
-    </td>
-          </tr>
-        `;
+      <tr>
+        <td>${row.order_date}</td>
+        <td>${row.addcart_id}</td>
+        <td>${row.billing_lname}, ${row.billing_fname}</td>
+        <td>${row.billing_street_village_purok}</td>
+        <td>${row.billing_baranggay}</td>
+        <td>${row.billing_city}</td>
+        <td>${row.billing_province}</td>
+        <td>${row.billing_country}</td>
+        <td>${row.total_quantity}</td>
+        <td>${parseFloat(row.total_amount)
+                     .toLocaleString(undefined, {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2
+                     })}</td>
+        <td>${row.addcart_status}</td>
+         <td>
+            <button class="btn btn-primary btn-sm"
+                    onclick='downloadReceipt(${JSON.stringify(row)})'>
+              Download
+            </button>
+          </td>
+        <td>${actionCell}</td>
+      </tr>`;
       });
     }
-  }
-   function downloadReceipt(row) {
+
+
+    function downloadReceipt(row) {
   const receiptContainer = document.createElement('div');
   receiptContainer.innerHTML = `
     <div style="font-family: Arial, sans-serif; padding: 20px; max-width: 600px; margin: auto; border: 1px solid #ccc; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
@@ -523,6 +552,7 @@
       <table style="width: 100%; margin-top: 20px; border-collapse: collapse;">
         <tr><td style="font-weight:bold; background:#f9f9f9; border:1px solid #ddd;">Order ID</td><td style="border:1px solid #ddd;">${row.addcart_id}</td></tr>
         <tr><td style="font-weight:bold; background:#f9f9f9; border:1px solid #ddd;">Order Date</td><td style="border:1px solid #ddd;">${row.order_date}</td></tr>
+        <tr><td style="font-weight:bold; background:#f9f9f9; border:1px solid #ddd;">Customer Name</td><td style="border:1px solid #ddd;">${row.billing_lname}, ${row.billing_fname}</td></tr>
         <tr><td style="font-weight:bold; background:#f9f9f9; border:1px solid #ddd;">Street / Purok</td><td style="border:1px solid #ddd;">${row.billing_street_village_purok}</td></tr>
         <tr><td style="font-weight:bold; background:#f9f9f9; border:1px solid #ddd;">Barangay</td><td style="border:1px solid #ddd;">${row.billing_baranggay}</td></tr>
         <tr><td style="font-weight:bold; background:#f9f9f9; border:1px solid #ddd;">City</td><td style="border:1px solid #ddd;">${row.billing_city}</td></tr>
@@ -548,60 +578,87 @@
     .save();
 }
 
-  
+    function searchTable() {
+      const input = document.getElementById("searchInput");
+      const filter = input.value.toLowerCase();
+      const tbody = document.getElementById("ordersBody");
+      const rows = tbody.getElementsByTagName("tr");
 
-  // Search table
-  function searchTable() {
-    const input = document.getElementById("searchInput");
-    const filter = input.value.toLowerCase();
-    const tbody = document.getElementById("ordersBody");
-    const rows = tbody.getElementsByTagName("tr");
+      for (let i = 0; i < rows.length; i++) {
+        const cells = rows[i].getElementsByTagName("td");
+        let rowContainsKeyword = false;
 
-    for (let i = 0; i < rows.length; i++) {
-      const cells = rows[i].getElementsByTagName("td");
-      let rowContainsKeyword = false;
-
-      for (let j = 0; j < cells.length; j++) {
-        if (cells[j].textContent.toLowerCase().includes(filter)) {
-          rowContainsKeyword = true;
-          break;
+        for (let j = 0; j < cells.length - 1; j++) { // Exclude the last "Action" column
+          if (cells[j].textContent.toLowerCase().includes(filter)) {
+            rowContainsKeyword = true;
+            break;
+          }
         }
+
+        rows[i].style.display = rowContainsKeyword ? "" : "none";
       }
-
-      rows[i].style.display = rowContainsKeyword ? "" : "none";
     }
-  }
 
-  // Setup pagination buttons
-  function setupPagination() {
-    const pagination = document.getElementById('pagination');
-    pagination.innerHTML = '';
 
-    const pageCount = Math.ceil(ordersData.length / rowsPerPage);
-
-    for (let i = 1; i <= pageCount; i++) {
-      const li = document.createElement('li');
-      li.classList.add('page-item');
-      if (i === currentPage) li.classList.add('active');
-
-      const a = document.createElement('a');
-      a.classList.add('page-link');
-      a.href = "#";
-      a.innerText = i;
-
-      a.addEventListener('click', function(e) {
-        e.preventDefault();
-        currentPage = i;
-        displayTable(currentPage);
-        setupPagination();
-      });
-
-      li.appendChild(a);
-      pagination.appendChild(li);
+    function updateStatus(orderId, status) {
+     
+      const userId = localStorage.getItem('user_id');
+      alert(userId);
+    // Fetch data from server
+      fetch(`api/seller_update_status.php?user_id=${userId}&orderId=${orderId}&status=${status}`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          
+        })
+        .then(response => response.json())
+        .then(data => {
+          if (data.success) {
+            alert('Status updated successfully!');
+            // Refresh the table or update the status in the table directly
+            fetch(`api/seller_fetch_orders.php?user_id=${userId}`)
+              .then(res => res.json())
+              .then(data => {
+                ordersData = data;
+                displayTable(currentPage);
+                setupPagination();
+              });
+          } else {
+            alert('Failed to update status.');
+          }
+        })
+        .catch(error => console.error('Error:', error));
     }
-  }
-</script>
+    // Setup pagination buttons
+    function setupPagination() {
+      const pagination = document.getElementById('pagination');
+      pagination.innerHTML = '';
 
+      const pageCount = Math.ceil(ordersData.length / rowsPerPage);
+
+      for (let i = 1; i <= pageCount; i++) {
+        const li = document.createElement('li');
+        li.classList.add('page-item');
+        if (i === currentPage) li.classList.add('active');
+
+        const a = document.createElement('a');
+        a.classList.add('page-link');
+        a.href = "#";
+        a.innerText = i;
+
+        a.addEventListener('click', function(e) {
+          e.preventDefault();
+          currentPage = i;
+          displayTable(currentPage);
+          setupPagination();
+        });
+
+        li.appendChild(a);
+        pagination.appendChild(li);
+      }
+    }
+  </script>
   <script>
     function loadNotifications(all = false) {
       const userId = localStorage.getItem('user_id');
@@ -751,7 +808,6 @@
     // Call the notification function every 2 minutes
     document.addEventListener("DOMContentLoaded", () => loadNotifications());
   </script>
-
 
 
   <script src="asset/js/plugins/apexcharts.min.js"></script>

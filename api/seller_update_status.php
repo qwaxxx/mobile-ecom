@@ -1,33 +1,28 @@
 <?php
-session_start();
 header('Content-Type: application/json');
-include("api/conn.php");
-
-// Only accept POST
-if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    http_response_code(405);
-    echo json_encode(['success' => false, 'error' => 'Invalid request method']);
-    exit;
-}
+include("conn.php");
 
 // Decode JSON body
 $body = file_get_contents('php://input');
-$data = json_decode($body, true);
-if (!isset($data['order_id'], $data['status'])) {
-    http_response_code(400);
-    echo json_encode(['success' => false, 'error' => 'Missing parameters']);
-    exit;
-}
-$order_id = (int)$data['order_id'];
-$status   = $data['status'];
+//$data = json_decode($body, true);
+//if (!isset($data['order_id'], $data['status'])) {
+//    http_response_code(400);
+//   echo json_encode(['success' => false, 'error' => 'Missing parameters']);
+//   exit;
+//}
+//$order_id = (int)$data['order_id'];
+//$status   = $data['status'];
 
-// Check login
-if (!isset($_SESSION['user_id'])) {
-    http_response_code(401);
-    echo json_encode(['success' => false, 'error' => 'Unauthorized']);
-    exit;
-}
-$seller_id = $_SESSION['user_id'];
+// Retrieve user_id from the GET request
+$seller_id = (int)$_GET['user_id'] ?? null;
+$order_id = (int)$_GET['orderId'] ?? null; // Get user_id from query parameters
+$status = $_GET['status'] ?? null;
+//$seller_id = $_GET['user_id'] ?? null; // Get user_id from query parameters
+//$seller_id = 8;
+//$order_id = 61; // Get user_id from query parameters
+//$status = 'accepted';
+
+
 
 // Fetch the order and verify it belongs to this seller
 $stmt = $conn->prepare(

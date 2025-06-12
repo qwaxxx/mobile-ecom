@@ -1,14 +1,18 @@
 <?php
-session_start();
-include("api/conn.php");
+header("Content-Type: application/json");
+include("conn.php");
 
-if (!isset($_SESSION['user_id'])) {
-    http_response_code(401);
-    echo json_encode(['error' => 'Unauthorized']);
+
+// Get raw POST data
+$input = json_decode(file_get_contents('php://input'), true);
+// Retrieve user_id from the GET request
+$user_id = $_GET['user_id'] ?? null; // Get user_id from query parameters
+//$user_id = 9; // Get user_id from query parameters
+
+if ($user_id === null) {
+    echo json_encode(['result' => false, 'error' => 'User ID is required']);
     exit;
 }
-
-$session_user_id = $_SESSION['user_id'];
 
 $sql = "
 SELECT 
@@ -36,7 +40,7 @@ ORDER BY ac.addcart_date DESC
 
 
 $stmt = $conn->prepare($sql);
-$stmt->bind_param("i", $session_user_id);
+$stmt->bind_param("i", $user_id);
 $stmt->execute();
 $result = $stmt->get_result();
 $data = [];

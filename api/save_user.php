@@ -19,7 +19,6 @@ if (
     $contact  = $data['contact'];
     $userType = $data['user_type'];
     $image    = $data['image'] ?? null;
-
     $stmt = $conn->prepare("INSERT INTO users (name, email, password, contact, user_type, profile_image, create_on) 
                             VALUES (?, ?, ?, ?, ?, ?, NOW())");
 
